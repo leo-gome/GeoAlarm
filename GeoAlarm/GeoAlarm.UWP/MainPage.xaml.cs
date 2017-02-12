@@ -20,7 +20,7 @@ namespace GeoAlarm.UWP
         public MainPage()
         {
             this.InitializeComponent();
-
+            Xamarin.FormsMaps.Init("INSERT_MAP_KEY_HERE");
             LoadApplication(new GeoAlarm.App());
         }
     }

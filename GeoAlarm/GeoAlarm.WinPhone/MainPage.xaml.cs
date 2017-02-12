@@ -25,7 +25,7 @@ namespace GeoAlarm.WinPhone
         public MainPage()
         {
             this.InitializeComponent();
-
+            Xamarin.FormsMaps.Init("INSERT_MAP_KEY_HERE");
             this.NavigationCacheMode = NavigationCacheMode.Required;
 
             LoadApplication(new GeoAlarm.App());

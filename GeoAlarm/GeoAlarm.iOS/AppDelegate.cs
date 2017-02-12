@@ -22,8 +22,10 @@ namespace GeoAlarm.iOS
 		//
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
-			global::Xamarin.Forms.Forms.Init ();
-			LoadApplication (new GeoAlarm.App ());
+            global::Xamarin.Forms.Forms.Init();
+            global::Xamarin.FormsMaps.Init();
+
+            LoadApplication(new GeoAlarm.App ());
 
 			return base.FinishedLaunching (app, options);
 		}

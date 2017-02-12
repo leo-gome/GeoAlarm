@@ -11,6 +11,8 @@ namespace GeoAlarm
 	{
 		public App ()
 		{
+            MainPage = new MapPage();
+            /*
 			// The root page of your application
 			MainPage = new ContentPage {
 				Content = new StackLayout {
@@ -23,6 +25,7 @@ namespace GeoAlarm
 					}
 				}
 			};
+            */
 		}
 
 		protected override void OnStart ()

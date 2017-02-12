@@ -1,0 +1,1 @@
+H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Windows\GeoAlarm.Windows.csproj;arm

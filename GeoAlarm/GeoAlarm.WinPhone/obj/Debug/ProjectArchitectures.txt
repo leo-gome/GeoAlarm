@@ -1,0 +1,1 @@
+H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.WinPhone\GeoAlarm.WinPhone.csproj;neutral
