@@ -1,3 +1,7 @@
+GeoAlarm.Droid.CustomMapRenderer, GeoAlarm.Droid;md573c43f774f784ce7a72c924a95cb49c9.CustomMapRenderer
+GeoAlarm.Droid.CustomMapRenderer, GeoAlarm.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md573c43f774f784ce7a72c924a95cb49c9.CustomMapRenderer
+GeoAlarm.Droid.CustomMapRenderer;md573c43f774f784ce7a72c924a95cb49c9.CustomMapRenderer
+geoalarm.droid.CustomMapRenderer;md573c43f774f784ce7a72c924a95cb49c9.CustomMapRenderer
 GeoAlarm.Droid.MainActivity, GeoAlarm.Droid;md573c43f774f784ce7a72c924a95cb49c9.MainActivity
 GeoAlarm.Droid.MainActivity, GeoAlarm.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md573c43f774f784ce7a72c924a95cb49c9.MainActivity
 GeoAlarm.Droid.MainActivity;md573c43f774f784ce7a72c924a95cb49c9.MainActivity

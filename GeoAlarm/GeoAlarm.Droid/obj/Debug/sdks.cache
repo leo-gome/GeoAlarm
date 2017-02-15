@@ -6,7 +6,7 @@
   <AndroidSdkBuildToolsPath>H:\Android2016\sdk\build-tools\23.0.3</AndroidSdkBuildToolsPath>
   <AndroidSdkBuildToolsBinPath>H:\Android2016\sdk\build-tools\23.0.3</AndroidSdkBuildToolsBinPath>
   <AndroidSdkPath>H:\Android2016\sdk</AndroidSdkPath>
-  <JavaSdkPath>C:\Program Files (x86)\Java\jdk1.7.0_55</JavaSdkPath>
+  <JavaSdkPath>C:\Program Files\Java\jdk1.8.0_121</JavaSdkPath>
   <MonoAndroidBinPath>C:\Program Files (x86)\MSBuild\Xamarin\Android</MonoAndroidBinPath>
   <MonoAndroidToolsPath>C:\Program Files (x86)\MSBuild\Xamarin\Android</MonoAndroidToolsPath>
   <ReferenceAssemblyPaths>
