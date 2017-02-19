@@ -9,6 +9,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
+using CoreLocation;
+
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace GeoAlarm.iOS
 {
@@ -16,6 +18,8 @@ namespace GeoAlarm.iOS
     {
         UIView customPinView;
         List<CustomPin> customPins;
+        MKCircleRenderer circleRenderer;
+        MKPolygonRenderer polygonRenderer;
 
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
@@ -34,7 +38,28 @@ namespace GeoAlarm.iOS
             {
                 var formsMap = (CustomMap)e.NewElement;
                 var nativeMap = Control as MKMapView;
+                var circle = formsMap.Circle;
                 customPins = formsMap.CustomPins;
+
+
+                nativeMap.OverlayRenderer = GetOverlayRenderer;
+
+                var circleOverlay = MKCircle.Circle(new CoreLocation.CLLocationCoordinate2D(circle.Position.Latitude, circle.Position.Longitude), circle.Radius);
+                nativeMap.AddOverlay(circleOverlay);
+
+                nativeMap.OverlayRenderer = GetOverlayRendererPoly;
+
+                CLLocationCoordinate2D[] coords = new CLLocationCoordinate2D[formsMap.ShapeCoordinates.Count];
+
+                int index = 0;
+                foreach (var position in formsMap.ShapeCoordinates) {
+                    coords [index] = new CLLocationCoordinate2D (position.Latitude, position.Longitude);
+                    index++;
+                }
+
+                var blockOverlay = MKPolygon.FromCoordinates (coords);
+                nativeMap.AddOverlay (blockOverlay);
+
 
                 nativeMap.GetViewForAnnotation = GetViewForAnnotation;
                 nativeMap.CalloutAccessoryControlTapped += OnCalloutAccessoryControlTapped;
@@ -119,6 +144,30 @@ namespace GeoAlarm.iOS
                 }
             }
             return null;
+        }
+
+        MKOverlayRenderer GetOverlayRenderer(MKMapView mapView, IMKOverlay overlay)
+        {
+            if (circleRenderer == null)
+            {
+                circleRenderer = new MKCircleRenderer(overlay as MKCircle);
+                circleRenderer.FillColor = UIColor.Red;
+                circleRenderer.Alpha = 0.4f;
+            }
+            return circleRenderer;
+        }
+
+        MKOverlayRenderer GetOverlayRendererPoly(MKMapView mapView, IMKOverlay overlay)
+        {
+            if (polygonRenderer == null)
+            {
+                polygonRenderer = new MKPolygonRenderer(overlay as MKPolygon);
+                polygonRenderer.FillColor = UIColor.Red;
+                polygonRenderer.StrokeColor = UIColor.Blue;
+                polygonRenderer.Alpha = 0.4f;
+                polygonRenderer.LineWidth = 9;
+            }
+            return polygonRenderer;
         }
     }
 }

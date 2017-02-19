@@ -8,5 +8,12 @@ namespace GeoAlarm
     class CustomMap : Map
     {
         public List<CustomPin> CustomPins { get; set; }
+        public CustomCircle Circle { get; set; }
+        public List<Position> ShapeCoordinates { get; set; }
+
+        public CustomMap()
+        {
+            ShapeCoordinates = new List<Position>();
+        }
     }
 }

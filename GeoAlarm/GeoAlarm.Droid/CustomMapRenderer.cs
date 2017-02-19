@@ -18,6 +18,8 @@ namespace GeoAlarm.Droid
     {
         GoogleMap map;
         List<CustomPin> customPins;
+        CustomCircle circle;
+        List<Position> shapeCoordinates;
         bool isDrawn;
 
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
@@ -33,8 +35,10 @@ namespace GeoAlarm.Droid
             {
                 var formsMap = (CustomMap)e.NewElement;
                 customPins = formsMap.CustomPins;
+                circle = formsMap.Circle;
+                shapeCoordinates = formsMap.ShapeCoordinates;
                 ((MapView)Control).GetMapAsync(this);
-            }
+            }            
         }
 
         public void OnMapReady(GoogleMap googleMap)
@@ -42,6 +46,8 @@ namespace GeoAlarm.Droid
             map = googleMap;
             map.InfoWindowClick += OnInfoWindowClick;
             map.SetInfoWindowAdapter(this);
+
+
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -52,6 +58,8 @@ namespace GeoAlarm.Droid
             {
                 map.Clear();
 
+
+                // Add pins
                 foreach (var pin in customPins)
                 {
                     var marker = new MarkerOptions();
@@ -62,6 +70,32 @@ namespace GeoAlarm.Droid
 
                     map.AddMarker(marker);
                 }
+
+                // Add Circle
+                var circleOptions = new CircleOptions();
+                circleOptions.InvokeCenter(new LatLng(circle.Position.Latitude, circle.Position.Longitude));
+                circleOptions.InvokeRadius(circle.Radius);
+                circleOptions.InvokeFillColor(0X66FF0000);
+                circleOptions.InvokeStrokeColor(0X66FF0000);
+                circleOptions.InvokeStrokeWidth(0);
+                map.AddCircle(circleOptions);
+
+                //Add area
+                var polygonOptions = new PolygonOptions();
+                polygonOptions.InvokeFillColor(0x66FF0000);
+                polygonOptions.InvokeStrokeColor(0x660000FF);
+                polygonOptions.InvokeStrokeWidth(30.0f);
+
+                foreach (var position in shapeCoordinates)
+                {
+                    polygonOptions.Add(new LatLng(position.Latitude, position.Longitude));
+                }
+
+                map.AddPolygon(polygonOptions);
+
+
+
+
                 isDrawn = true;
             }
         }
@@ -149,5 +183,6 @@ namespace GeoAlarm.Droid
             }
             return null;
         }
+        
     }
 }

@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomCircle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomPin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MapPage.cs" />
