@@ -151,6 +151,9 @@
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\MapInfoWindow.axml" />
     <AndroidResource Include="Resources\Layout\XamarinMapInfoWindow.axml" />
+    <AndroidResource Include="Resources\Layout\myLayout.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />

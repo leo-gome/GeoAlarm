@@ -9,5 +9,6 @@ namespace GeoAlarm
     {
         public Position Position { get; set; }
         public double Radius { get; set; }
+        public string Url { get; set; }
     }
 }

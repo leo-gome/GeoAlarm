@@ -10,6 +10,7 @@ using GeoAlarm.Droid;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
+using Android.App;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace GeoAlarm.Droid
@@ -48,6 +49,39 @@ namespace GeoAlarm.Droid
             map.SetInfoWindowAdapter(this);
 
 
+
+            // Add pins
+            foreach (var pin in customPins)
+            {
+                var marker = new MarkerOptions();
+                marker.SetPosition(new LatLng(pin.Pin.Position.Latitude, pin.Pin.Position.Longitude));
+                marker.SetTitle(pin.Pin.Label);
+                marker.SetSnippet(pin.Pin.Address);
+                marker.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.pin));
+                map.AddMarker(marker);
+            }
+
+            // Add Circle
+            var circleOptions = new CircleOptions();
+            circleOptions.InvokeCenter(new LatLng(circle.Position.Latitude, circle.Position.Longitude));
+            circleOptions.InvokeRadius(circle.Radius);
+            circleOptions.InvokeFillColor(0X66FF0000);
+            circleOptions.InvokeStrokeColor(0X66FF0000);
+            circleOptions.InvokeStrokeWidth(0);
+            map.AddCircle(circleOptions);
+
+            // Add area
+            var polygonOptions = new PolygonOptions();
+            polygonOptions.InvokeFillColor(0x66FF0000);
+            polygonOptions.InvokeStrokeColor(0x660000FF);
+            polygonOptions.InvokeStrokeWidth(30.0f);
+
+            foreach (var position in shapeCoordinates)
+            {
+                polygonOptions.Add(new LatLng(position.Latitude, position.Longitude));
+            }
+
+            map.AddPolygon(polygonOptions);
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -56,44 +90,7 @@ namespace GeoAlarm.Droid
 
             if (e.PropertyName.Equals("VisibleRegion") && !isDrawn)
             {
-                map.Clear();
-
-
-                // Add pins
-                foreach (var pin in customPins)
-                {
-                    var marker = new MarkerOptions();
-                    marker.SetPosition(new LatLng(pin.Pin.Position.Latitude, pin.Pin.Position.Longitude));
-                    marker.SetTitle(pin.Pin.Label);
-                    marker.SetSnippet(pin.Pin.Address);
-                    marker.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.pin));
-
-                    map.AddMarker(marker);
-                }
-
-                // Add Circle
-                var circleOptions = new CircleOptions();
-                circleOptions.InvokeCenter(new LatLng(circle.Position.Latitude, circle.Position.Longitude));
-                circleOptions.InvokeRadius(circle.Radius);
-                circleOptions.InvokeFillColor(0X66FF0000);
-                circleOptions.InvokeStrokeColor(0X66FF0000);
-                circleOptions.InvokeStrokeWidth(0);
-                map.AddCircle(circleOptions);
-
-                //Add area
-                var polygonOptions = new PolygonOptions();
-                polygonOptions.InvokeFillColor(0x66FF0000);
-                polygonOptions.InvokeStrokeColor(0x660000FF);
-                polygonOptions.InvokeStrokeWidth(30.0f);
-
-                foreach (var position in shapeCoordinates)
-                {
-                    polygonOptions.Add(new LatLng(position.Latitude, position.Longitude));
-                }
-
-                map.AddPolygon(polygonOptions);
-
-
+                //map.Clear();
 
 
                 isDrawn = true;
@@ -112,6 +109,7 @@ namespace GeoAlarm.Droid
 
         void OnInfoWindowClick(object sender, GoogleMap.InfoWindowClickEventArgs e)
         {
+            /*
             var customPin = GetCustomPin(e.Marker);
             if (customPin == null)
             {
@@ -120,11 +118,17 @@ namespace GeoAlarm.Droid
 
             if (!string.IsNullOrWhiteSpace(customPin.Url))
             {
+                
                 var url = Android.Net.Uri.Parse(customPin.Url);
                 var intent = new Intent(Intent.ActionView, url);
                 intent.AddFlags(ActivityFlags.NewTask);
                 Android.App.Application.Context.StartActivity(intent);
+                
             }
+            */
+            //App.MyNavigationPage.PushAsync(new AlarmPage());
+            //App.MyNavigationPage.PopAsync();
+            App.myMapPage.changeMyContent();
         }
 
         public Android.Views.View GetInfoContents(Marker marker)
@@ -142,7 +146,18 @@ namespace GeoAlarm.Droid
 
                 if (customPin.Id == "Xamarin")
                 {
-                    view = inflater.Inflate(Resource.Layout.XamarinMapInfoWindow, null);
+                    /*
+                    var activity = this.Context as Activity;
+                    activity.SetContentView(Resource.Layout.myLayout);
+                    activity.SetContentView(Resource.Layout.MapInfoWindow);
+                    
+                    */
+                    //TextView alarmText = (TextView)activity.FindViewById(Resource.Id.myLayoutTextView);
+                    //alarmText.Text = "Awesome alarm";
+                    //view.co
+
+
+                    view = inflater.Inflate(Resource.Layout.MapInfoWindow, null);
                 }
                 else
                 {

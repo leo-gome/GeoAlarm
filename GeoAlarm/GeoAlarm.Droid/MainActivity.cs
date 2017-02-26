@@ -18,6 +18,7 @@ namespace GeoAlarm.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             global::Xamarin.FormsMaps.Init(this, bundle);
+
             LoadApplication (new GeoAlarm.App ());
 		}
 	}

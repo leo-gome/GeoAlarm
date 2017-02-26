@@ -1,4 +1,3 @@
-H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\GeoAlarm.Droid.csprojResolveAssemblyReference.cache
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\GeoAlarm.Droid.dll
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\GeoAlarm.Droid.pdb
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\GeoAlarm.Android.apk
@@ -32,6 +31,7 @@ H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\Xamarin.Forms.Platf
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\Xamarin.Forms.Xaml.pdb
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\Xamarin.Forms.Xaml.xml
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\bin\Debug\Xamarin.Forms.Xaml.dll.mdb
+H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\GeoAlarm.Droid.csprojResolveAssemblyReference.cache
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\GeoAlarm.Droid.Resources.Resource1.resources
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\GeoAlarm.Droid.csproj.GenerateResource.Cache
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\GeoAlarm.Droid.dll
@@ -39,6 +39,7 @@ H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\GeoAlarm.Droid.pdb
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\android\bin\GeoAlarm.Android.apk
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\res\layout\mapinfowindow.xml
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\res\layout\xamarinmapinfowindow.xml
+H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\res\layout\mylayout.xml
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\res\drawable\icon.png
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\res\drawable\pin.png
 H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.Droid\obj\Debug\res\drawable-hdpi\icon.png

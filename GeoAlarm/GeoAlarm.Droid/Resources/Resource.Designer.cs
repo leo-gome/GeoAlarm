@@ -2495,8 +2495,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a007d
 			public const int InfoWindowTitle = 2131361917;
 			
-			// aapt resource value: 0x7f0a0099
-			public const int action0 = 2131361945;
+			// aapt resource value: 0x7f0a009b
+			public const int action0 = 2131361947;
 			
 			// aapt resource value: 0x7f0a0065
 			public const int action_bar = 2131361893;
@@ -2522,8 +2522,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a0066
 			public const int action_context_bar = 2131361894;
 			
-			// aapt resource value: 0x7f0a009d
-			public const int action_divider = 2131361949;
+			// aapt resource value: 0x7f0a009f
+			public const int action_divider = 2131361951;
 			
 			// aapt resource value: 0x7f0a0003
 			public const int action_menu_divider = 2131361795;
@@ -2567,8 +2567,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a004f
 			public const int buttonPanel = 2131361871;
 			
-			// aapt resource value: 0x7f0a009a
-			public const int cancel_action = 2131361946;
+			// aapt resource value: 0x7f0a009c
+			public const int cancel_action = 2131361948;
 			
 			// aapt resource value: 0x7f0a0036
 			public const int center = 2131361846;
@@ -2582,8 +2582,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a005d
 			public const int checkbox = 2131361885;
 			
-			// aapt resource value: 0x7f0a00a0
-			public const int chronometer = 2131361952;
+			// aapt resource value: 0x7f0a00a2
+			public const int chronometer = 2131361954;
 			
 			// aapt resource value: 0x7f0a003e
 			public const int clip_horizontal = 2131361854;
@@ -2636,8 +2636,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a0027
 			public const int end = 2131361831;
 			
-			// aapt resource value: 0x7f0a00a5
-			public const int end_padder = 2131361957;
+			// aapt resource value: 0x7f0a00a7
+			public const int end_padder = 2131361959;
 			
 			// aapt resource value: 0x7f0a002e
 			public const int enterAlways = 2131361838;
@@ -2687,8 +2687,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a004a
 			public const int image = 2131361866;
 			
-			// aapt resource value: 0x7f0a00a4
-			public const int info = 2131361956;
+			// aapt resource value: 0x7f0a00a6
+			public const int info = 2131361958;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int item_touch_helper_previous_elevation = 2131361792;
@@ -2699,11 +2699,11 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a0017
 			public const int light = 2131361815;
 			
-			// aapt resource value: 0x7f0a009e
-			public const int line1 = 2131361950;
+			// aapt resource value: 0x7f0a00a0
+			public const int line1 = 2131361952;
 			
-			// aapt resource value: 0x7f0a00a2
-			public const int line3 = 2131361954;
+			// aapt resource value: 0x7f0a00a4
+			public const int line3 = 2131361956;
 			
 			// aapt resource value: 0x7f0a0018
 			public const int listMode = 2131361816;
@@ -2711,8 +2711,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a004c
 			public const int list_item = 2131361868;
 			
-			// aapt resource value: 0x7f0a009c
-			public const int media_actions = 2131361948;
+			// aapt resource value: 0x7f0a009e
+			public const int media_actions = 2131361950;
 			
 			// aapt resource value: 0x7f0a0028
 			public const int middle = 2131361832;
@@ -2794,6 +2794,12 @@ namespace GeoAlarm.Droid
 			
 			// aapt resource value: 0x7f0a0021
 			public const int multiply = 2131361825;
+			
+			// aapt resource value: 0x7f0a009a
+			public const int myLayoutImageView1 = 2131361946;
+			
+			// aapt resource value: 0x7f0a0099
+			public const int myLayoutTextView = 2131361945;
 			
 			// aapt resource value: 0x7f0a0078
 			public const int navigation_header_container = 2131361912;
@@ -2924,8 +2930,8 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a003c
 			public const int start = 2131361852;
 			
-			// aapt resource value: 0x7f0a009b
-			public const int status_bar_latest_event_content = 2131361947;
+			// aapt resource value: 0x7f0a009d
+			public const int status_bar_latest_event_content = 2131361949;
 			
 			// aapt resource value: 0x7f0a0070
 			public const int submit_area = 2131361904;
@@ -2936,17 +2942,17 @@ namespace GeoAlarm.Droid
 			// aapt resource value: 0x7f0a000f
 			public const int terrain = 2131361807;
 			
-			// aapt resource value: 0x7f0a00a3
-			public const int text = 2131361955;
+			// aapt resource value: 0x7f0a00a5
+			public const int text = 2131361957;
 			
-			// aapt resource value: 0x7f0a00a1
-			public const int text2 = 2131361953;
+			// aapt resource value: 0x7f0a00a3
+			public const int text2 = 2131361955;
 			
 			// aapt resource value: 0x7f0a0058
 			public const int textSpacerNoButtons = 2131361880;
 			
-			// aapt resource value: 0x7f0a009f
-			public const int time = 2131361951;
+			// aapt resource value: 0x7f0a00a1
+			public const int time = 2131361953;
 			
 			// aapt resource value: 0x7f0a004e
 			public const int title = 2131361870;
@@ -3195,43 +3201,46 @@ namespace GeoAlarm.Droid
 			public const int mr_volume_control = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int notification_media_action = 2130903084;
+			public const int myLayout = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int notification_media_cancel_action = 2130903085;
+			public const int notification_media_action = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int notification_template_big_media = 2130903086;
+			public const int notification_media_cancel_action = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int notification_template_big_media_narrow = 2130903087;
+			public const int notification_template_big_media = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int notification_template_lines = 2130903088;
+			public const int notification_template_big_media_narrow = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int notification_template_media = 2130903089;
+			public const int notification_template_lines = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int notification_template_part_chronometer = 2130903090;
+			public const int notification_template_media = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int notification_template_part_time = 2130903091;
+			public const int notification_template_part_chronometer = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int select_dialog_item_material = 2130903092;
+			public const int notification_template_part_time = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int select_dialog_multichoice_material = 2130903093;
+			public const int select_dialog_item_material = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int select_dialog_singlechoice_material = 2130903094;
+			public const int select_dialog_multichoice_material = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int support_simple_spinner_dropdown_item = 2130903095;
+			public const int select_dialog_singlechoice_material = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int XamarinMapInfoWindow = 2130903096;
+			public const int support_simple_spinner_dropdown_item = 2130903096;
+			
+			// aapt resource value: 0x7f030039
+			public const int XamarinMapInfoWindow = 2130903097;
 			
 			static Layout()
 			{

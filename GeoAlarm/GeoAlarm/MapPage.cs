@@ -9,6 +9,8 @@ namespace GeoAlarm
     public class MapPage : ContentPage
     {
         CustomMap customMap;
+        StackLayout stack;
+        bool alarmMenuShown = false;
         public MapPage()
         {
             customMap = new CustomMap
@@ -26,9 +28,11 @@ namespace GeoAlarm
                
 
             // put the page together
+            /*
             var stack = new StackLayout { Spacing = 0 };
             stack.Children.Add(customMap);
             Content = stack;
+            */
 
             var pin = new CustomPin
             {
@@ -40,7 +44,7 @@ namespace GeoAlarm
                     Address = "394 Pacific Ave, San Francisco CA"
                 },
                 Id = "Xamarin",
-                Url = "http://xamarin.com/about/"
+                Url = "http://www.google.com"
             };
 
             customMap.CustomPins = new List<CustomPin> { pin };
@@ -52,7 +56,8 @@ namespace GeoAlarm
             customMap.Circle = new CustomCircle
             {
                 Position = position,
-                Radius = 1000
+                Radius = 1000,
+                Url = "http://www.google.com"
             };
 
             customMap.ShapeCoordinates.Add(new Position(37.797513, -122.402058));
@@ -60,7 +65,96 @@ namespace GeoAlarm
             customMap.ShapeCoordinates.Add(new Position(37.798582, -122.401071));
             customMap.ShapeCoordinates.Add(new Position(37.797658, -122.400888));
 
+            /*
+            // create buttons
+            var morePins = new Button { Text = "Add more pins" };
+            morePins.Clicked += (sender, e) => {
+                customMap.Pins.Add(new Pin
+                {
+                    Position = new Position(36.9641949, -122.0177232),
+                    Label = "Boardwalk"
+                });
+                customMap.Pins.Add(new Pin
+                {
+                    Position = new Position(36.9571571, -122.0173544),
+                    Label = "Wharf"
+                });
+                customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+                    new Position(36.9628066, -122.0194722), Distance.FromMiles(1.5)));
 
+            };
+            var reLocate = new Button { Text = "Re-center" };
+            reLocate.Clicked += (sender, e) => {
+                stack.Children.RemoveAt(1);
+                Content = stack;
+            };
+            var buttons = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Children = {
+                    morePins, reLocate
+                }
+            };
+            */
+
+            // put the page together
+            stack = new StackLayout
+            {
+                Spacing = 0
+            };
+
+            stack.Children.Add(customMap);
+            Content = stack;
+
+        }
+
+        public void changeMyContent()
+        {
+            if (alarmMenuShown)
+            {
+                stack.Children.RemoveAt(1);
+                Content = stack;
+            }
+            else
+            {
+                showAlarmMenu();
+            }
+            alarmMenuShown = !alarmMenuShown;
+        }
+
+        private void showAlarmMenu()
+        {
+            var submitButton = new Button { Text = "Submit" };
+            submitButton.Clicked += (sender, e) => {
+                stack.Children.RemoveAt(1);
+                Content = stack;
+            };
+            
+            var alarmNameEntry = new Entry { Text = "I am an Entry" };
+            var alarmNameLabel = new Label { Text = "Alarm name" };
+            var areaLabel = new Label { Text = "Area Size" };
+            var areaSlider = new Slider { Maximum = 5000, Minimum = 100, Value = 2500 };
+            var startTimeLabel = new Label { Text = "Start" };
+            var startTime = new TimePicker { Format = "h:mm tt"};
+            var endTimeLabel = new Label { Text = "End" };
+            var endTime = new TimePicker { Format = "h:mm tt" };
+            var alarmLayout = new StackLayout
+            {
+                Orientation = StackOrientation.Vertical,
+                Children = {
+                     alarmNameLabel,
+                     alarmNameEntry,
+                     areaLabel,
+                     areaSlider,
+                     startTimeLabel,
+                     startTime,
+                     endTimeLabel,
+                     endTime,
+                     submitButton
+                }
+            };
+            stack.Children.Add(alarmLayout);
+            Content = stack;
         }
 
     }

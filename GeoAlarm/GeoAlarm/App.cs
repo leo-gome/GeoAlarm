@@ -9,9 +9,13 @@ namespace GeoAlarm
 {
 	public class App : Application
 	{
-		public App ()
+        public static NavigationPage MyNavigationPage;
+        public static MapPage myMapPage;
+        public App ()
 		{
-            MainPage = new MapPage();
+            //MyNavigationPage = new NavigationPage(new MapPage());            
+            myMapPage = new MapPage();
+            MainPage = myMapPage;
             /*
 			// The root page of your application
 			MainPage = new ContentPage {
@@ -26,7 +30,7 @@ namespace GeoAlarm
 				}
 			};
             */
-		}
+        }
 
 		protected override void OnStart ()
 		{

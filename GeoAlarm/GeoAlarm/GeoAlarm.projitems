@@ -9,6 +9,7 @@
     <Import_RootNamespace>GeoAlarm</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AlarmPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomCircle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomMap.cs" />
