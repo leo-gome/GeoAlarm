@@ -11,6 +11,7 @@ namespace GeoAlarm
         CustomMap customMap;
         StackLayout stack;
         bool alarmMenuShown = false;
+        public bool redraw = false;
         public MapPage()
         {
             customMap = new CustomMap
@@ -20,7 +21,6 @@ namespace GeoAlarm
                 WidthRequest = 960,
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
-
             // You can use MapSpan.FromCenterAndRadius 
             //map.MoveToRegion (MapSpan.FromCenterAndRadius (new Position (37, -122), Distance.FromMiles (0.3)));
             // or create a new MapSpan object directly
@@ -126,18 +126,19 @@ namespace GeoAlarm
         {
             var submitButton = new Button { Text = "Submit" };
             submitButton.Clicked += (sender, e) => {
-                stack.Children.RemoveAt(1);
-                Content = stack;
+                changeMyContent();
             };
             
             var alarmNameEntry = new Entry { Text = "I am an Entry" };
             var alarmNameLabel = new Label { Text = "Alarm name" };
             var areaLabel = new Label { Text = "Area Size" };
-            var areaSlider = new Slider { Maximum = 5000, Minimum = 100, Value = 2500 };
+            var areaSlider = new Slider { Maximum = 5000, Minimum = 100, Value = customMap.Circle.Radius };
             var startTimeLabel = new Label { Text = "Start" };
             var startTime = new TimePicker { Format = "h:mm tt"};
             var endTimeLabel = new Label { Text = "End" };
             var endTime = new TimePicker { Format = "h:mm tt" };
+            areaSlider.ValueChanged += OnSliderValueChanged;
+           
             var alarmLayout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
@@ -157,5 +158,19 @@ namespace GeoAlarm
             Content = stack;
         }
 
+        void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            customMap.Circle.Radius = e.NewValue;
+            double newDistance = e.NewValue / 1000;
+            redraw = true;
+            MessagingCenter.Send<MapPage>(this, "RedrawMe");
+            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+             new Position(37.79752, -122.40183), Distance.FromMiles(newDistance)));
+
+        }
+
+       
     }
+
+  
 }

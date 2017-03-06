@@ -15,5 +15,7 @@ namespace GeoAlarm
         {
             ShapeCoordinates = new List<Position>();
         }
+
+
     }
 }
