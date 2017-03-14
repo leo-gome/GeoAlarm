@@ -9,7 +9,7 @@ namespace GeoAlarm
     public class MapPage : ContentPage
     {
         CustomMap customMap;
-        StackLayout stack;
+        private RelativeLayout stack;
         bool alarmMenuShown = false;
         public bool redraw = false;
         public MapPage()
@@ -64,46 +64,19 @@ namespace GeoAlarm
             customMap.ShapeCoordinates.Add(new Position(37.798433, -122.402256));
             customMap.ShapeCoordinates.Add(new Position(37.798582, -122.401071));
             customMap.ShapeCoordinates.Add(new Position(37.797658, -122.400888));
-
-            /*
-            // create buttons
-            var morePins = new Button { Text = "Add more pins" };
-            morePins.Clicked += (sender, e) => {
-                customMap.Pins.Add(new Pin
-                {
-                    Position = new Position(36.9641949, -122.0177232),
-                    Label = "Boardwalk"
-                });
-                customMap.Pins.Add(new Pin
-                {
-                    Position = new Position(36.9571571, -122.0173544),
-                    Label = "Wharf"
-                });
-                customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-                    new Position(36.9628066, -122.0194722), Distance.FromMiles(1.5)));
-
-            };
-            var reLocate = new Button { Text = "Re-center" };
-            reLocate.Clicked += (sender, e) => {
-                stack.Children.RemoveAt(1);
-                Content = stack;
-            };
-            var buttons = new StackLayout
-            {
-                Orientation = StackOrientation.Horizontal,
-                Children = {
-                    morePins, reLocate
-                }
-            };
-            */
-
+            
             // put the page together
-            stack = new StackLayout
+            stack = new RelativeLayout
             {
-                Spacing = 0
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
-            stack.Children.Add(customMap);
+            stack.Children.Add(customMap,
+                    xConstraint: Constraint.Constant(0),
+                    yConstraint: Constraint.Constant(0),
+                    widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
+                    heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height; }));
             Content = stack;
 
         }
@@ -138,7 +111,7 @@ namespace GeoAlarm
             var endTimeLabel = new Label { Text = "End" };
             var endTime = new TimePicker { Format = "h:mm tt" };
             areaSlider.ValueChanged += OnSliderValueChanged;
-           
+
             var alarmLayout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
@@ -152,9 +125,17 @@ namespace GeoAlarm
                      endTimeLabel,
                      endTime,
                      submitButton
-                }
+                },
+                Padding = 15,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.FromRgba (0,0,0, 180)            
             };
-            stack.Children.Add(alarmLayout);
+            stack.Children.Add(alarmLayout,
+                    xConstraint: Constraint.Constant(0),
+                    yConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }),
+                    widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
+                    heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }));
             Content = stack;
         }
 
@@ -163,9 +144,10 @@ namespace GeoAlarm
             customMap.Circle.Radius = e.NewValue;
             double newDistance = e.NewValue / 1000;
             redraw = true;
+            double newLat = 37.787 - (newDistance / 1000);
             MessagingCenter.Send<MapPage>(this, "RedrawMe");
             customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-             new Position(37.79752, -122.40183), Distance.FromMiles(newDistance)));
+             new Position(newLat, -122.40183), Distance.FromMiles(newDistance)));
 
         }
 
