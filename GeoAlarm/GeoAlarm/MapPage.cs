@@ -8,31 +8,48 @@ namespace GeoAlarm
 {
     public class MapPage : ContentPage
     {
-        CustomMap customMap;
+        private CustomMap customMap;
+        public CustomPin selectedPin { get; set; }
+
         private RelativeLayout stack;
         bool alarmMenuShown = false;
         public bool redraw = false;
+
+        private readonly int MAX_RADIUS = 5000;
+        private readonly int MIN_RADIUS = 500;
+
         public MapPage()
         {
             customMap = new CustomMap
             {
-                //IsShowingUser = true,
                 HeightRequest = 100,
                 WidthRequest = 960,
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
-            // You can use MapSpan.FromCenterAndRadius 
-            //map.MoveToRegion (MapSpan.FromCenterAndRadius (new Position (37, -122), Distance.FromMiles (0.3)));
-            // or create a new MapSpan object directly
-            customMap.MoveToRegion(new MapSpan(new Position(0, 0), 360, 360));
-               
 
-            // put the page together
-            /*
-            var stack = new StackLayout { Spacing = 0 };
-            stack.Children.Add(customMap);
-            Content = stack;
-            */
+            customMap.MoveToRegion(new MapSpan(new Position(0, 0), 360, 360));
+
+
+            // For testing only
+
+            Alarm myAlarm1 = new Alarm
+            {
+                Name = "myAlarm1",
+                Radius = 1000
+            };
+
+            Alarm myAlarm2 = new Alarm
+            {
+                Name = "myAlarm2",
+                Radius = 3000
+            };
+
+            Alarm myAlarm3 = new Alarm
+            {
+                Name = "myAlarm3",
+                Radius = 5000
+            };
+
 
             var pin = new CustomPin
             {
@@ -40,30 +57,50 @@ namespace GeoAlarm
                 {
                     Type = PinType.Place,
                     Position = new Position(37.79752, -122.40183),
-                    Label = "Xamarin San Francisco Office",
+                    Label = myAlarm1.Name,
                     Address = "394 Pacific Ave, San Francisco CA"
                 },
-                Id = "Xamarin",
-                Url = "http://www.google.com"
+                Id = "Alarm",
+                Alarm = myAlarm1
             };
 
-            customMap.CustomPins = new List<CustomPin> { pin };
-            customMap.Pins.Add(pin.Pin);
-            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-              new Position(37.79752, -122.40183), Distance.FromMiles(1.0)));
-
-            var position = new Position(37.79752, -122.40183);
-            customMap.Circle = new CustomCircle
+            var pin2 = new CustomPin
             {
-                Position = position,
-                Radius = 1000,
-                Url = "http://www.google.com"
+                Pin = new Pin
+                {
+                    Type = PinType.Place,
+                    Position = new Position(37.78, -122.40183),
+                    Label = myAlarm2.Name,
+                    Address = "394 Pacific Ave, San Francisco CA"
+                },
+                Id = "Alarm",
+                Alarm = myAlarm2
             };
 
-            customMap.ShapeCoordinates.Add(new Position(37.797513, -122.402058));
-            customMap.ShapeCoordinates.Add(new Position(37.798433, -122.402256));
-            customMap.ShapeCoordinates.Add(new Position(37.798582, -122.401071));
-            customMap.ShapeCoordinates.Add(new Position(37.797658, -122.400888));
+            var pin3 = new CustomPin
+            {
+                Pin = new Pin
+                {
+                    Type = PinType.Place,
+                    Position = new Position(37.77, -122.40183),
+                    Label = myAlarm3.Name,
+                    Address = "394 Pacific Ave, San Francisco CA"
+                },
+                Id = "Alarm",
+                Alarm = myAlarm3
+            };
+
+
+
+
+            List<CustomPin> cPins = new List<CustomPin> { pin, pin2, pin3 };
+            customMap.CustomPins = cPins;
+            foreach (CustomPin cp in cPins)
+            {
+                customMap.Pins.Add(cp.Pin);
+            }
+            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+              pin.Pin.Position, Distance.FromMiles(1.0)));            
             
             // put the page together
             stack = new RelativeLayout
@@ -78,8 +115,8 @@ namespace GeoAlarm
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height; }));
             Content = stack;
-
         }
+        
 
         public void changeMyContent()
         {
@@ -87,6 +124,7 @@ namespace GeoAlarm
             {
                 stack.Children.RemoveAt(1);
                 Content = stack;
+                drawAlarm();
             }
             else
             {
@@ -97,15 +135,17 @@ namespace GeoAlarm
 
         private void showAlarmMenu()
         {
+            
             var submitButton = new Button { Text = "Submit" };
             submitButton.Clicked += (sender, e) => {
                 changeMyContent();
+
             };
             
-            var alarmNameEntry = new Entry { Text = "I am an Entry" };
             var alarmNameLabel = new Label { Text = "Alarm name" };
+            var alarmNameEntry = new Entry { Text = selectedPin.Alarm.Name};
             var areaLabel = new Label { Text = "Area Size" };
-            var areaSlider = new Slider { Maximum = 5000, Minimum = 100, Value = customMap.Circle.Radius };
+            var areaSlider = new Slider { Maximum = MAX_RADIUS, Minimum = MIN_RADIUS, Value = selectedPin.Alarm.Radius };
             var startTimeLabel = new Label { Text = "Start" };
             var startTime = new TimePicker { Format = "h:mm tt"};
             var endTimeLabel = new Label { Text = "End" };
@@ -137,18 +177,23 @@ namespace GeoAlarm
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }));
             Content = stack;
+            
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
         {
-            customMap.Circle.Radius = e.NewValue;
-            double newDistance = e.NewValue / 1000;
+            selectedPin.Alarm.Radius = e.NewValue;
+            //double newDistance = e.NewValue / 1000;
+            //double newLat = 37.787 - (newDistance / 1000);
+            drawAlarm();
+        }
+
+        void drawAlarm()
+        {
             redraw = true;
-            double newLat = 37.787 - (newDistance / 1000);
             MessagingCenter.Send<MapPage>(this, "RedrawMe");
             customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-             new Position(newLat, -122.40183), Distance.FromMiles(newDistance)));
-
+             selectedPin.Pin.Position, Distance.FromMiles(selectedPin.Alarm.Radius / 1000)));
         }
 
        

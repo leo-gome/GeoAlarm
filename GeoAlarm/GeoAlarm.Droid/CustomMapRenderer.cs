@@ -93,8 +93,9 @@ namespace GeoAlarm.Droid
         {
             // Add Circle
             var circleOptions = new CircleOptions();
-            circleOptions.InvokeCenter(new LatLng(circle.Position.Latitude, circle.Position.Longitude));
-            circleOptions.InvokeRadius(circle.Radius);
+            circleOptions.InvokeCenter(new LatLng(App.myMapPage.selectedPin.Pin.Position.Latitude, 
+                App.myMapPage.selectedPin.Pin.Position.Longitude));
+            circleOptions.InvokeRadius(App.myMapPage.selectedPin.Alarm.Radius);
             circleOptions.InvokeFillColor(0X66FF0000);
             circleOptions.InvokeStrokeColor(0X66FF0000);
             circleOptions.InvokeStrokeWidth(0);
@@ -128,19 +129,9 @@ namespace GeoAlarm.Droid
                     throw new Exception("Custom pin not found");
                 }
 
-                if (customPin.Id == "Xamarin")
+                if (customPin.Id == "Alarm")
                 {
-                    /*
-                    var activity = this.Context as Activity;
-                    activity.SetContentView(Resource.Layout.myLayout);
-                    activity.SetContentView(Resource.Layout.MapInfoWindow);
-                    
-                    */
-                    //TextView alarmText = (TextView)activity.FindViewById(Resource.Id.myLayoutTextView);
-                    //alarmText.Text = "Awesome alarm";
-                    //view.co
-
-
+                    App.myMapPage.selectedPin = customPin;
                     view = inflater.Inflate(Resource.Layout.MapInfoWindow, null);
                 }
                 else

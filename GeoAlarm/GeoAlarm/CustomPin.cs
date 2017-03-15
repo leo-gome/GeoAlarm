@@ -5,10 +5,10 @@ using Xamarin.Forms.Maps;
 
 namespace GeoAlarm
 {
-    class CustomPin
+    public class CustomPin
     {
         public Pin Pin { get; set; }
         public string Id { get; set; }
-        public string Url { get; set; }
+        public Alarm Alarm { get; set; }
     }
 }

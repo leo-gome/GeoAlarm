@@ -5,10 +5,9 @@ using Xamarin.Forms.Maps;
 
 namespace GeoAlarm
 {
-    class CustomCircle
+    public class CustomCircle
     {
         public Position Position { get; set; }
         public double Radius { get; set; }
-        public string Url { get; set; }
     }
 }

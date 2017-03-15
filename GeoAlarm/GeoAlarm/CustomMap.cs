@@ -5,7 +5,7 @@ using Xamarin.Forms.Maps;
 
 namespace GeoAlarm
 {
-    class CustomMap : Map
+    public class CustomMap : Map
     {
         public List<CustomPin> CustomPins { get; set; }
         public CustomCircle Circle { get; set; }
