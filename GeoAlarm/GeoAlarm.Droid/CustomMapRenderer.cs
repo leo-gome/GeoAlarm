@@ -48,11 +48,20 @@ namespace GeoAlarm.Droid
             map.InfoWindowClick += OnInfoWindowClick;
             map.SetInfoWindowAdapter(this);
             map.CameraChange += OnCameraChanged;
+            map.Clear();
+            reDrawPin();
 
-            MessagingCenter.Subscribe<MapPage>(this, "RedrawMe", (sender) => {
+            MessagingCenter.Subscribe<MapPage, string>(this, "RedrawMe", (sender, arg) => {
                 map.Clear();
-                reDrawCircle();
-                reDrawPin();
+                if (arg == "pinsOnly")
+                {
+                    reDrawPin();
+                }
+                else if(arg == "all")
+                {
+                    reDrawPin();
+                    reDrawCircle();
+                }
             });
 
         }
@@ -80,7 +89,8 @@ namespace GeoAlarm.Droid
 
         void OnInfoWindowClick(object sender, GoogleMap.InfoWindowClickEventArgs e)
         {
-            App.myMapPage.changeMyContent();
+            //App.myMapPage.changeMyContent();
+            App.myMapPage.openEditMenu();
         }
 
         void OnCameraChanged(object sender, GoogleMap.CameraChangeEventArgs e)
@@ -115,6 +125,7 @@ namespace GeoAlarm.Droid
                 map.AddMarker(marker);
             }
         }
+        
 
         public Android.Views.View GetInfoContents(Marker marker)
         {
@@ -131,7 +142,12 @@ namespace GeoAlarm.Droid
 
                 if (customPin.Id == "Alarm")
                 {
-                    App.myMapPage.selectedPin = customPin;
+                    if(customPin != App.myMapPage.selectedPin)
+                    {
+                        App.myMapPage.selectedPin = customPin;
+                        App.myMapPage.closeEditMenu();
+                    }
+
                     view = inflater.Inflate(Resource.Layout.MapInfoWindow, null);
                 }
                 else

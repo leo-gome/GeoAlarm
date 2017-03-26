@@ -12,8 +12,7 @@ namespace GeoAlarm
         public CustomPin selectedPin { get; set; }
 
         private RelativeLayout stack;
-        bool alarmMenuShown = false;
-        public bool redraw = false;
+        public bool alarmMenuShown = false;
 
         private readonly int MAX_RADIUS = 5000;
         private readonly int MIN_RADIUS = 500;
@@ -117,20 +116,20 @@ namespace GeoAlarm
             Content = stack;
         }
         
-
-        public void changeMyContent()
+        public void openEditMenu()
         {
-            if (alarmMenuShown)
+            drawAlarm();
+            showAlarmMenu();
+        }
+        
+        public void closeEditMenu()
+        {
+            if (stack.Children.Count >= 2)
             {
                 stack.Children.RemoveAt(1);
                 Content = stack;
-                drawAlarm();
+                MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "pinsOnly");
             }
-            else
-            {
-                showAlarmMenu();
-            }
-            alarmMenuShown = !alarmMenuShown;
         }
 
         private void showAlarmMenu()
@@ -138,7 +137,9 @@ namespace GeoAlarm
             
             var submitButton = new Button { Text = "Submit" };
             submitButton.Clicked += (sender, e) => {
-                changeMyContent();
+                //changeMyContent();
+                closeEditMenu();
+                MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "pinsOnly");
 
             };
             
@@ -190,10 +191,10 @@ namespace GeoAlarm
 
         void drawAlarm()
         {
-            redraw = true;
-            MessagingCenter.Send<MapPage>(this, "RedrawMe");
+            MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "all");
+            var renderedLat = selectedPin.Pin.Position.Latitude - (selectedPin.Alarm.Radius / 80000);
             customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-             selectedPin.Pin.Position, Distance.FromMiles(selectedPin.Alarm.Radius / 1000)));
+             new Position(renderedLat, selectedPin.Pin.Position.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / 1000)));
         }
 
        
