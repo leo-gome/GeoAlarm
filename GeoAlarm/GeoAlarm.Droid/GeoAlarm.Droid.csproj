@@ -154,6 +154,7 @@
     <AndroidResource Include="Resources\Layout\myLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\AlarmInfo.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />

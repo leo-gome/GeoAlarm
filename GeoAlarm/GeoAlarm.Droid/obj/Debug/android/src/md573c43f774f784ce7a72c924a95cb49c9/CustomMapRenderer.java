@@ -6,7 +6,8 @@ public class CustomMapRenderer
 	implements
 		mono.android.IGCUserPeer,
 		com.google.android.gms.maps.GoogleMap.InfoWindowAdapter,
-		com.google.android.gms.maps.OnMapReadyCallback
+		com.google.android.gms.maps.OnMapReadyCallback,
+		com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener
 {
 /** @hide */
 	public static final String __md_methods;
@@ -16,6 +17,7 @@ public class CustomMapRenderer
 			"n_getInfoContents:(Lcom/google/android/gms/maps/model/Marker;)Landroid/view/View;:GetGetInfoContents_Lcom_google_android_gms_maps_model_Marker_Handler:Android.Gms.Maps.GoogleMap/IInfoWindowAdapterInvoker, Xamarin.GooglePlayServices.Maps\n" +
 			"n_getInfoWindow:(Lcom/google/android/gms/maps/model/Marker;)Landroid/view/View;:GetGetInfoWindow_Lcom_google_android_gms_maps_model_Marker_Handler:Android.Gms.Maps.GoogleMap/IInfoWindowAdapterInvoker, Xamarin.GooglePlayServices.Maps\n" +
 			"n_onMapReady:(Lcom/google/android/gms/maps/GoogleMap;)V:GetOnMapReady_Lcom_google_android_gms_maps_GoogleMap_Handler:Android.Gms.Maps.IOnMapReadyCallbackInvoker, Xamarin.GooglePlayServices.Maps\n" +
+			"n_onInfoWindowClick:(Lcom/google/android/gms/maps/model/Marker;)V:GetOnInfoWindowClick_Lcom_google_android_gms_maps_model_Marker_Handler:Android.Gms.Maps.GoogleMap/IOnInfoWindowClickListenerInvoker, Xamarin.GooglePlayServices.Maps\n" +
 			"";
 		mono.android.Runtime.register ("GeoAlarm.Droid.CustomMapRenderer, GeoAlarm.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", CustomMapRenderer.class, __md_methods);
 	}
@@ -75,6 +77,14 @@ public class CustomMapRenderer
 	}
 
 	private native void n_onMapReady (com.google.android.gms.maps.GoogleMap p0);
+
+
+	public void onInfoWindowClick (com.google.android.gms.maps.model.Marker p0)
+	{
+		n_onInfoWindowClick (p0);
+	}
+
+	private native void n_onInfoWindowClick (com.google.android.gms.maps.model.Marker p0);
 
 	private java.util.ArrayList refList;
 	public void monodroidAddReference (java.lang.Object obj)

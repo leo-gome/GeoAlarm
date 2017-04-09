@@ -12,16 +12,17 @@ using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
 using Android.App;
 
+
+
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace GeoAlarm.Droid
 {
-    public class CustomMapRenderer : MapRenderer, GoogleMap.IInfoWindowAdapter, IOnMapReadyCallback
+    public class CustomMapRenderer : MapRenderer, GoogleMap.IInfoWindowAdapter, IOnMapReadyCallback, GoogleMap.IOnInfoWindowClickListener
     {
         GoogleMap map;
         List<CustomPin> customPins;
         CustomCircle circle;
         List<Position> shapeCoordinates;
-        bool isDrawn;
 
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
         {
@@ -29,7 +30,6 @@ namespace GeoAlarm.Droid
 
             if (e.OldElement != null)
             {
-                map.InfoWindowClick -= OnInfoWindowClick;
             }
 
             if (e.NewElement != null)
@@ -45,36 +45,40 @@ namespace GeoAlarm.Droid
         public void OnMapReady(GoogleMap googleMap)
         {
             map = googleMap;
-            map.InfoWindowClick += OnInfoWindowClick;
             map.SetInfoWindowAdapter(this);
+            map.SetOnInfoWindowClickListener(this);
             map.CameraChange += OnCameraChanged;
             map.Clear();
-            reDrawPin();
+            reDrawPins();
 
-            MessagingCenter.Subscribe<MapPage, string>(this, "RedrawMe", (sender, arg) => {
+            MessagingCenter.Subscribe<MapPage, string>(this, "RedrawMe", (sender, arg) =>
+            {
                 map.Clear();
                 if (arg == "pinsOnly")
                 {
-                    reDrawPin();
+                    reDrawPins();
                 }
-                else if(arg == "all")
+                else if (arg == "all")
                 {
-                    reDrawPin();
+                    reDrawPins();
                     reDrawCircle();
                 }
             });
 
+            MessagingCenter.Subscribe<MapPage, string>(this, "Save", (sender, arg) =>
+            {
+                if (arg == "Alarm")
+                {
+                    // TODO: Persist Alarm
+                    Toast.MakeText(this.Context, "TODO: Save me :)", ToastLength.Long).Show();
+                }
+            });
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-
-            if (e.PropertyName.Equals("VisibleRegion") && !isDrawn)
-            {
-                map.Clear();
-                isDrawn = true;
-            }            
+            
         }
 
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
@@ -83,16 +87,9 @@ namespace GeoAlarm.Droid
 
             if (changed)
             {
-                isDrawn = false;
             }
         }
-
-        void OnInfoWindowClick(object sender, GoogleMap.InfoWindowClickEventArgs e)
-        {
-            //App.myMapPage.changeMyContent();
-            App.myMapPage.openEditMenu();
-        }
-
+        
         void OnCameraChanged(object sender, GoogleMap.CameraChangeEventArgs e)
         {
 
@@ -112,7 +109,7 @@ namespace GeoAlarm.Droid
             map.AddCircle(circleOptions);
         }
 
-        void reDrawPin()
+        void reDrawPins()
         {
             // Add pins
             foreach (var pin in customPins)
@@ -129,46 +126,35 @@ namespace GeoAlarm.Droid
 
         public Android.Views.View GetInfoContents(Marker marker)
         {
+            // Close menu
+            App.myMapPage.closeAlarmMenu();
+
+            // Inflate custom info screen       
             var inflater = Android.App.Application.Context.GetSystemService(Context.LayoutInflaterService) as Android.Views.LayoutInflater;
             if (inflater != null)
             {
                 Android.Views.View view;
+                CustomPin customPin = GetCustomPin(marker);
+                view = inflater.Inflate(Resource.Layout.AlarmInfo, null);
+                
+                App.myMapPage.selectedPin = customPin;
 
-                var customPin = GetCustomPin(marker);
-                if (customPin == null)
-                {
-                    throw new Exception("Custom pin not found");
-                }
+                var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
+                var alarmDays = view.FindViewById<TextView>(Resource.Id.AlarmDays);
+                var alarmTime = view.FindViewById<TextView>(Resource.Id.AlarmTime);
+                var alarmType = view.FindViewById<TextView>(Resource.Id.AlarmType);
+                var alarmRange = view.FindViewById<TextView>(Resource.Id.AlarmRange);
 
-                if (customPin.Id == "Alarm")
-                {
-                    if(customPin != App.myMapPage.selectedPin)
-                    {
-                        App.myMapPage.selectedPin = customPin;
-                        App.myMapPage.closeEditMenu();
-                    }
-
-                    view = inflater.Inflate(Resource.Layout.MapInfoWindow, null);
-                }
-                else
-                {
-                    view = inflater.Inflate(Resource.Layout.MapInfoWindow, null);
-                }
-
-                var infoTitle = view.FindViewById<TextView>(Resource.Id.InfoWindowTitle);
-                var infoSubtitle = view.FindViewById<TextView>(Resource.Id.InfoWindowSubtitle);
-
-                if (infoTitle != null)
-                {
-                    infoTitle.Text = marker.Title;
-                }
-                if (infoSubtitle != null)
-                {
-                    infoSubtitle.Text = marker.Snippet;
-                }
+                alarmTitle.Text = customPin.Alarm.Name;
+                alarmDays.Text = LanguageUtils.LanguageVariables.INFOSCREEN_DAYS + " : " + customPin.Alarm.getActiveDaysInStr();
+                alarmTime.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TIME + " : " + customPin.Alarm.StartTime;
+                alarmType.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TYPE + " : " + customPin.Alarm.AlarmType.ToString();
+                alarmRange.Text = LanguageUtils.LanguageVariables.INFOSCREEN_RANGE + " : " + customPin.Alarm.Radius.ToString();
 
                 return view;
             }
+            
+
             return null;
         }
 
@@ -189,6 +175,10 @@ namespace GeoAlarm.Droid
             }
             return null;
         }
-        
+
+        public void OnInfoWindowClick(Marker marker)
+        {
+            App.myMapPage.openAlarmMenu();
+        }
     }
 }

@@ -7,9 +7,27 @@ namespace GeoAlarm
 {
     public class Alarm
     {
+        public enum Type { Single, Repetitive };
+
         public string Name { get; set; }
-        public TimePicker StartTime { get; set; }
-        public TimePicker EndTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public double Radius { get; set; }
+        public bool Active { get; set; }
+        public DayOfWeek[] ActiveDays { get; set; }
+        public Type AlarmType { get; set; }
+
+        public string getActiveDaysInStr()
+        {
+            if (ActiveDays.Length == 1)
+            {
+                return ActiveDays[0].ToString();
+            }
+            else if (ActiveDays.Length >= 2)
+            {
+                return ActiveDays[0].ToString() + " - " + ActiveDays[ActiveDays.Length - 1].ToString();
+            }
+            return "-";
+        }
     }
 }

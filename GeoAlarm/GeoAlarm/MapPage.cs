@@ -11,11 +11,15 @@ namespace GeoAlarm
         private CustomMap customMap;
         public CustomPin selectedPin { get; set; }
 
-        private RelativeLayout stack;
-        public bool alarmMenuShown = false;
+        public RelativeLayout relativeLayout;
 
         private readonly int MAX_RADIUS = 5000;
         private readonly int MIN_RADIUS = 500;
+
+        // Tweakers
+        private readonly int CAMERA_LATITUDE_OFFSET = 80000;
+        private readonly int CAMERA_ZOOM_OFFSET = 1000;
+        private readonly uint ANIMATION_SPEED = 400;
 
         public MapPage()
         {
@@ -25,124 +29,55 @@ namespace GeoAlarm
                 WidthRequest = 960,
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
-
             customMap.MoveToRegion(new MapSpan(new Position(0, 0), 360, 360));
-
-
-            // For testing only
-
-            Alarm myAlarm1 = new Alarm
-            {
-                Name = "myAlarm1",
-                Radius = 1000
-            };
-
-            Alarm myAlarm2 = new Alarm
-            {
-                Name = "myAlarm2",
-                Radius = 3000
-            };
-
-            Alarm myAlarm3 = new Alarm
-            {
-                Name = "myAlarm3",
-                Radius = 5000
-            };
-
-
-            var pin = new CustomPin
-            {
-                Pin = new Pin
-                {
-                    Type = PinType.Place,
-                    Position = new Position(37.79752, -122.40183),
-                    Label = myAlarm1.Name,
-                    Address = "394 Pacific Ave, San Francisco CA"
-                },
-                Id = "Alarm",
-                Alarm = myAlarm1
-            };
-
-            var pin2 = new CustomPin
-            {
-                Pin = new Pin
-                {
-                    Type = PinType.Place,
-                    Position = new Position(37.78, -122.40183),
-                    Label = myAlarm2.Name,
-                    Address = "394 Pacific Ave, San Francisco CA"
-                },
-                Id = "Alarm",
-                Alarm = myAlarm2
-            };
-
-            var pin3 = new CustomPin
-            {
-                Pin = new Pin
-                {
-                    Type = PinType.Place,
-                    Position = new Position(37.77, -122.40183),
-                    Label = myAlarm3.Name,
-                    Address = "394 Pacific Ave, San Francisco CA"
-                },
-                Id = "Alarm",
-                Alarm = myAlarm3
-            };
-
-
-
-
-            List<CustomPin> cPins = new List<CustomPin> { pin, pin2, pin3 };
-            customMap.CustomPins = cPins;
-            foreach (CustomPin cp in cPins)
-            {
-                customMap.Pins.Add(cp.Pin);
-            }
-            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-              pin.Pin.Position, Distance.FromMiles(1.0)));            
             
+            // For testing only
+            List<CustomPin> cPins = TestData.getTestCustomPins();
+            
+            customMap.CustomPins = cPins;
+
+            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+              cPins[0].Pin.Position, Distance.FromMiles(1.0)));
+            selectedPin = cPins[0];
             // put the page together
-            stack = new RelativeLayout
+            relativeLayout = new RelativeLayout
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
-            stack.Children.Add(customMap,
+            relativeLayout.Children.Add(customMap,
                     xConstraint: Constraint.Constant(0),
                     yConstraint: Constraint.Constant(0),
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height; }));
-            Content = stack;
+            createAlarmMenu();
+            closeAlarmMenu();
+            Content = relativeLayout;
         }
         
-        public void openEditMenu()
+        public void openAlarmMenu()
         {
             drawAlarm();
-            showAlarmMenu();
+            relativeLayout.Children[1].TranslateTo(0, 0, ANIMATION_SPEED);
         }
         
-        public void closeEditMenu()
+        public void closeAlarmMenu()
         {
-            if (stack.Children.Count >= 2)
-            {
-                stack.Children.RemoveAt(1);
-                Content = stack;
-                MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "pinsOnly");
-            }
+            relativeLayout.Children[1].TranslateTo(0, 1000, ANIMATION_SPEED);         
         }
+        
 
-        private void showAlarmMenu()
-        {
-            
+        private void createAlarmMenu()
+        {            
             var submitButton = new Button { Text = "Submit" };
             submitButton.Clicked += (sender, e) => {
-                //changeMyContent();
-                closeEditMenu();
-                MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "pinsOnly");
-
+                closeAlarmMenu();
+                cleanAlarmCircle();
+                saveAlarm();
+                reCenterMap();
             };
-            
+
             var alarmNameLabel = new Label { Text = "Alarm name" };
             var alarmNameEntry = new Entry { Text = selectedPin.Alarm.Name};
             var areaLabel = new Label { Text = "Area Size" };
@@ -172,32 +107,44 @@ namespace GeoAlarm
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 BackgroundColor = Color.FromRgba (0,0,0, 180)            
             };
-            stack.Children.Add(alarmLayout,
+            relativeLayout.Children.Add(alarmLayout,
                     xConstraint: Constraint.Constant(0),
                     yConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }),
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }));
-            Content = stack;
+            Content = relativeLayout;
             
         }
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
         {
             selectedPin.Alarm.Radius = e.NewValue;
-            //double newDistance = e.NewValue / 1000;
-            //double newLat = 37.787 - (newDistance / 1000);
             drawAlarm();
         }
 
         void drawAlarm()
         {
             MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "all");
-            var renderedLat = selectedPin.Pin.Position.Latitude - (selectedPin.Alarm.Radius / 80000);
+            var renderedLat = selectedPin.Pin.Position.Latitude - (selectedPin.Alarm.Radius / CAMERA_LATITUDE_OFFSET);
             customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-             new Position(renderedLat, selectedPin.Pin.Position.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / 1000)));
+             new Position(renderedLat, selectedPin.Pin.Position.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));
         }
 
-       
+        void cleanAlarmCircle()
+        {
+            MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "pinsOnly");
+        }
+
+       void saveAlarm()
+        {
+            MessagingCenter.Send<MapPage, string>(this, "Save", "Alarm");
+        }
+
+        void reCenterMap()
+        {
+            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+             selectedPin.Pin.Position, Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));
+        }
     }
 
   

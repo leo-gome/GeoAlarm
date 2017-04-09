@@ -15,7 +15,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomCircle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomPin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LanguageUtils\LanguageVariables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MapPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestUtils\TestData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />
