@@ -11,6 +11,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
 using Android.App;
+using System.Linq;
 
 
 
@@ -48,6 +49,7 @@ namespace GeoAlarm.Droid
             map.SetInfoWindowAdapter(this);
             map.SetOnInfoWindowClickListener(this);
             map.CameraChange += OnCameraChanged;
+            map.MapClick += onMapClick;
             map.Clear();
             reDrawPins();
 
@@ -73,6 +75,51 @@ namespace GeoAlarm.Droid
                     Toast.MakeText(this.Context, "TODO: Save me :)", ToastLength.Long).Show();
                 }
             });
+        }
+
+        protected void onMapClick(object sender, GoogleMap.MapClickEventArgs e)
+        {
+            var strToShow = "Lat " +  e.Point.Latitude + "  long " + e.Point.Longitude;
+            Toast.MakeText(this.Context, strToShow, ToastLength.Long).Show();
+            createPin(e);
+        }
+
+        private void createPin(GoogleMap.MapClickEventArgs e)
+        {
+            Alarm myAlarm1 = new Alarm
+            {
+                Name = "TempAlarm",
+                Radius = 1000,
+                Active = false,
+                ActiveDays = new DayOfWeek[] { DayOfWeek.Sunday },
+                AlarmType = Alarm.Type.Single,
+                StartTime = "18:00"
+            };
+
+            var tempCustomPin = new CustomPin
+            {
+                Pin = new Pin
+                {
+                    Type = PinType.Place,
+                    Position = new Position(e.Point.Latitude, e.Point.Longitude),
+                    Label = "",
+                    Address = "394 Pacific Ave, San Francisco CA"
+                },
+                Id = "TempAlarm",
+                Alarm = myAlarm1,
+                Icon = CustomPin.IconType.Blue
+            };
+            var lastCPin = customPins.Last();
+            if(lastCPin.Id == "TempAlarm")
+            {
+                customPins[customPins.Count - 1] = tempCustomPin;
+            }
+            else
+            {
+                customPins.Add(tempCustomPin);
+            }
+            map.Clear();
+            reDrawPins();
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -118,7 +165,7 @@ namespace GeoAlarm.Droid
                 marker.SetPosition(new LatLng(pin.Pin.Position.Latitude, pin.Pin.Position.Longitude));
                 marker.SetTitle(pin.Pin.Label);
                 marker.SetSnippet(pin.Pin.Address);
-                marker.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.pin));
+                marker.SetIcon(BitmapDescriptorFactory.FromResource(Utils.PinUtils.getPinIdFromIconType(pin.Icon)));
                 map.AddMarker(marker);
             }
         }
@@ -135,21 +182,30 @@ namespace GeoAlarm.Droid
             {
                 Android.Views.View view;
                 CustomPin customPin = GetCustomPin(marker);
-                view = inflater.Inflate(Resource.Layout.AlarmInfo, null);
                 
                 App.myMapPage.selectedPin = customPin;
 
-                var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
-                var alarmDays = view.FindViewById<TextView>(Resource.Id.AlarmDays);
-                var alarmTime = view.FindViewById<TextView>(Resource.Id.AlarmTime);
-                var alarmType = view.FindViewById<TextView>(Resource.Id.AlarmType);
-                var alarmRange = view.FindViewById<TextView>(Resource.Id.AlarmRange);
+                if (customPin.Id == "Alarm")
+                {
+                    view = inflater.Inflate(Resource.Layout.AlarmInfo, null);
+                    var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
+                    var alarmDays = view.FindViewById<TextView>(Resource.Id.AlarmDays);
+                    var alarmTime = view.FindViewById<TextView>(Resource.Id.AlarmTime);
+                    var alarmType = view.FindViewById<TextView>(Resource.Id.AlarmType);
+                    var alarmRange = view.FindViewById<TextView>(Resource.Id.AlarmRange);
+                    alarmTitle.Text = customPin.Alarm.Name;
+                    alarmDays.Text = LanguageUtils.LanguageVariables.INFOSCREEN_DAYS + " : " + customPin.Alarm.getActiveDaysInStr();
+                    alarmTime.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TIME + " : " + customPin.Alarm.StartTime;
+                    alarmType.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TYPE + " : " + customPin.Alarm.AlarmType.ToString();
+                    alarmRange.Text = LanguageUtils.LanguageVariables.INFOSCREEN_RANGE + " : " + customPin.Alarm.Radius.ToString();
 
-                alarmTitle.Text = customPin.Alarm.Name;
-                alarmDays.Text = LanguageUtils.LanguageVariables.INFOSCREEN_DAYS + " : " + customPin.Alarm.getActiveDaysInStr();
-                alarmTime.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TIME + " : " + customPin.Alarm.StartTime;
-                alarmType.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TYPE + " : " + customPin.Alarm.AlarmType.ToString();
-                alarmRange.Text = LanguageUtils.LanguageVariables.INFOSCREEN_RANGE + " : " + customPin.Alarm.Radius.ToString();
+                }
+                else
+                {
+                    view = inflater.Inflate(Resource.Layout.CreateAlarmInfo, null);
+                    var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
+                    alarmTitle.Text = "Create new alarm";
+                }
 
                 return view;
             }
