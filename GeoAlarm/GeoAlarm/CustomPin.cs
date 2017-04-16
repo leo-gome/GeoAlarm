@@ -9,7 +9,7 @@ namespace GeoAlarm
     {
         public enum IconType { Green, Red, Blue};
         public Pin Pin { get; set; }
-        public string Id { get; set; }
+        public string PinType { get; set; }
         public Alarm Alarm { get; set; }
         public IconType Icon { get; set; }
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms.Maps;
-using Xamarin.Forms.Platform.Android;
 
 namespace GeoAlarm
 {
@@ -20,7 +19,7 @@ namespace GeoAlarm
                 Active = false,
                 ActiveDays = new DayOfWeek[] { DayOfWeek.Sunday },
                 AlarmType = Alarm.Type.Single,
-                StartTime = "18:00"
+                StartTime = new TimeSpan(18, 22, 55)
             };
 
 
@@ -32,8 +31,8 @@ namespace GeoAlarm
                 Active = false,
                 ActiveDays = new DayOfWeek[] { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday },
                 AlarmType = Alarm.Type.Repetitive,
-                StartTime = "16:00"
-            };
+                StartTime = new TimeSpan(21, 55, 11)
+        };
 
             Alarm myAlarm3 = new Alarm
             {
@@ -42,7 +41,7 @@ namespace GeoAlarm
                 Active = true,
                 ActiveDays = new DayOfWeek[] { DayOfWeek.Friday },
                 AlarmType = Alarm.Type.Single,
-                StartTime = "15:00"
+                StartTime = new TimeSpan(9, 10, 15)
             };
 
 
@@ -55,7 +54,7 @@ namespace GeoAlarm
                     Label = myAlarm1.Name,
                     Address = "394 Pacific Ave, San Francisco CA"
                 },
-                Id = "Alarm",
+                PinType = "Alarm",
                 Alarm = myAlarm1,
                 Icon = CustomPin.IconType.Green
             };
@@ -69,7 +68,7 @@ namespace GeoAlarm
                     Label = myAlarm2.Name,
                     Address = "394 Pacific Ave, San Francisco CA"
                 },
-                Id = "Alarm",
+                PinType = "Alarm",
                 Alarm = myAlarm2,
                 Icon = CustomPin.IconType.Red
             };
@@ -83,7 +82,7 @@ namespace GeoAlarm
                     Label = myAlarm3.Name,
                     Address = "394 Pacific Ave, San Francisco CA"
                 },
-                Id = "Alarm",
+                PinType = "Alarm",
                 Alarm = myAlarm3,
                 Icon = CustomPin.IconType.Green
             };

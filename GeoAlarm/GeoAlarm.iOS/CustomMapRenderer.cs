@@ -82,15 +82,15 @@ namespace GeoAlarm.iOS
                 throw new Exception("Custom pin not found");
             }
 
-            annotationView = mapView.DequeueReusableAnnotation(customPin.Id);
+            annotationView = mapView.DequeueReusableAnnotation(customPin.PinType);
             if (annotationView == null)
             {
-                annotationView = new CustomMKAnnotationView(annotation, customPin.Id);
+                annotationView = new CustomMKAnnotationView(annotation, customPin.PinType);
                 annotationView.Image = UIImage.FromFile("pin.png");
                 annotationView.CalloutOffset = new CGPoint(0, 0);
                 annotationView.LeftCalloutAccessoryView = new UIImageView(UIImage.FromFile("monkey.png"));
                 annotationView.RightCalloutAccessoryView = UIButton.FromType(UIButtonType.DetailDisclosure);
-                ((CustomMKAnnotationView)annotationView).Id = customPin.Id;
+                ((CustomMKAnnotationView)annotationView).Id = customPin.PinType;
                 ((CustomMKAnnotationView)annotationView).Url = customPin.Url;
             }
             annotationView.CanShowCallout = true;

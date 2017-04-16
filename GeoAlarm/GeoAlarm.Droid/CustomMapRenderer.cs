@@ -73,6 +73,7 @@ namespace GeoAlarm.Droid
                 {
                     // TODO: Persist Alarm
                     Toast.MakeText(this.Context, "TODO: Save me :)", ToastLength.Long).Show();
+                    reDrawPins();
                 }
             });
         }
@@ -93,7 +94,7 @@ namespace GeoAlarm.Droid
                 Active = false,
                 ActiveDays = new DayOfWeek[] { DayOfWeek.Sunday },
                 AlarmType = Alarm.Type.Single,
-                StartTime = "18:00"
+                StartTime = new TimeSpan(12,0,0)
             };
 
             var tempCustomPin = new CustomPin
@@ -105,12 +106,12 @@ namespace GeoAlarm.Droid
                     Label = "",
                     Address = "394 Pacific Ave, San Francisco CA"
                 },
-                Id = "TempAlarm",
+                PinType = "TempAlarm",
                 Alarm = myAlarm1,
                 Icon = CustomPin.IconType.Blue
             };
             var lastCPin = customPins.Last();
-            if(lastCPin.Id == "TempAlarm")
+            if(lastCPin.PinType == "TempAlarm")
             {
                 customPins[customPins.Count - 1] = tempCustomPin;
             }
@@ -185,7 +186,7 @@ namespace GeoAlarm.Droid
                 
                 App.myMapPage.selectedPin = customPin;
 
-                if (customPin.Id == "Alarm")
+                if (customPin.PinType == "Alarm")
                 {
                     view = inflater.Inflate(Resource.Layout.AlarmInfo, null);
                     var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);

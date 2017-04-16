@@ -10,8 +10,8 @@ namespace GeoAlarm
         public enum Type { Single, Repetitive };
 
         public string Name { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
         public double Radius { get; set; }
         public bool Active { get; set; }
         public DayOfWeek[] ActiveDays { get; set; }

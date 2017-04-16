@@ -58,6 +58,24 @@ namespace GeoAlarm
         
         public void openAlarmMenu()
         {
+            // The Hack solution :(
+
+            // Get Alarm Layout
+            var alarmLayout = (StackLayout) relativeLayout.Children[1];
+
+            // Get Children from Alarm Layout
+            var alarmNameEntry = (Entry) alarmLayout.Children[1];
+            alarmNameEntry.Text = selectedPin.Alarm.Name;
+
+            var areaSlider = (Slider)alarmLayout.Children[3];
+            areaSlider.Value = selectedPin.Alarm.Radius;
+
+            var startTime = (TimePicker)alarmLayout.Children[5];
+            startTime.Time = selectedPin.Alarm.StartTime;
+
+            var endTime = (TimePicker)alarmLayout.Children[7];
+            endTime.Time = selectedPin.Alarm.EndTime;
+
             drawAlarm();
             relativeLayout.Children[1].TranslateTo(0, 0, ANIMATION_SPEED);
         }
@@ -137,6 +155,26 @@ namespace GeoAlarm
 
        void saveAlarm()
         {
+            selectedPin.PinType = "Alarm";
+            selectedPin.Icon = CustomPin.IconType.Green;
+
+            // Get Alarm Layout
+            var alarmLayout = (StackLayout)relativeLayout.Children[1];
+
+            // Get Children from Alarm Layout
+            var alarmNameEntry = (Entry)alarmLayout.Children[1];
+            selectedPin.Alarm.Name = alarmNameEntry.Text;
+
+            var areaSlider = (Slider)alarmLayout.Children[3];
+            selectedPin.Alarm.Radius = areaSlider.Value;
+
+            var startTime = (TimePicker)alarmLayout.Children[5];
+            selectedPin.Alarm.StartTime = startTime.Time;
+
+            var endTime = (TimePicker)alarmLayout.Children[7];
+            selectedPin.Alarm.EndTime = endTime.Time;
+
+
             MessagingCenter.Send<MapPage, string>(this, "Save", "Alarm");
         }
 
