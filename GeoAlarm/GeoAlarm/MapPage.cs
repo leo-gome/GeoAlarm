@@ -10,7 +10,7 @@ namespace GeoAlarm
     {
         private CustomMap customMap;
         public CustomPin selectedPin { get; set; }
-
+        
         public RelativeLayout relativeLayout;
 
         private readonly int MAX_RADIUS = 5000;
@@ -55,11 +55,9 @@ namespace GeoAlarm
             closeAlarmMenu();
             Content = relativeLayout;
         }
-        
+         
         public void openAlarmMenu()
         {
-            // The Hack solution :(
-
             // Get Alarm Layout
             var alarmLayout = (StackLayout) relativeLayout.Children[1];
 
@@ -85,7 +83,10 @@ namespace GeoAlarm
             relativeLayout.Children[1].TranslateTo(0, 1000, ANIMATION_SPEED);         
         }
         
-
+        /*
+         * Creates the alarm menu.
+         * The menu is a Stacklayout which is added to the main layout of the map
+         */        
         private void createAlarmMenu()
         {            
             var submitButton = new Button { Text = "Submit" };
@@ -130,16 +131,22 @@ namespace GeoAlarm
                     yConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }),
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height / 2; }));
-            Content = relativeLayout;
-            
+            Content = relativeLayout;            
         }
 
+        /*
+         * Changes the radius of the area when the slider changes its value
+         */ 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
         {
             selectedPin.Alarm.Radius = e.NewValue;
             drawAlarm();
         }
 
+        /*
+         * This function draw all elements on map. (Pins, Circle)
+         * It also moves the camera to the center of selected pin
+         */
         void drawAlarm()
         {
             MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "all");
@@ -148,12 +155,19 @@ namespace GeoAlarm
              new Position(renderedLat, selectedPin.Pin.Position.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));
         }
 
+        /*
+         * Clears the map and redraws only the pins. 
+         */ 
         void cleanAlarmCircle()
         {
             MessagingCenter.Send<MapPage, string>(this, "RedrawMe", "pinsOnly");
         }
 
-       void saveAlarm()
+        /*
+         * This function read the inputs on the menu and save its in the alarm 
+         * attached to the selected pin
+         */
+        void saveAlarm()
         {
             selectedPin.PinType = "Alarm";
             selectedPin.Icon = CustomPin.IconType.Green;
@@ -173,12 +187,14 @@ namespace GeoAlarm
 
             var endTime = (TimePicker)alarmLayout.Children[7];
             selectedPin.Alarm.EndTime = endTime.Time;
-
-
+            
             MessagingCenter.Send<MapPage, string>(this, "Save", "Alarm");
         }
 
-        void reCenterMap()
+        /*
+         * Camera is focus on the selected pin
+         */ 
+        public void reCenterMap()
         {
             customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
              selectedPin.Pin.Position, Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));

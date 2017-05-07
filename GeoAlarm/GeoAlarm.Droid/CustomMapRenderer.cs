@@ -24,6 +24,8 @@ namespace GeoAlarm.Droid
         List<CustomPin> customPins;
         CustomCircle circle;
         List<Position> shapeCoordinates;
+        bool shouldBeDelete = false;
+        CustomPin oldPin = new CustomPin();
 
         protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
         {
@@ -43,6 +45,10 @@ namespace GeoAlarm.Droid
             }            
         }
 
+        /*
+         * This function is called when the map is loaded for the first tinme.
+         * Listener functions are added at this point.
+         */ 
         public void OnMapReady(GoogleMap googleMap)
         {
             map = googleMap;
@@ -53,6 +59,9 @@ namespace GeoAlarm.Droid
             map.Clear();
             reDrawPins();
 
+            // RedrawMe: Is used when the main thread needs to redraw any specific objects on the map
+            // pinsOnly: Only the pins are drawn
+            // all: Pins and the circle are drawn
             MessagingCenter.Subscribe<MapPage, string>(this, "RedrawMe", (sender, arg) =>
             {
                 map.Clear();
@@ -67,17 +76,21 @@ namespace GeoAlarm.Droid
                 }
             });
 
+            // Save: Is called in order to give five a feedback to the user that the alarm was saved
             MessagingCenter.Subscribe<MapPage, string>(this, "Save", (sender, arg) =>
             {
                 if (arg == "Alarm")
                 {
-                    // TODO: Persist Alarm
-                    Toast.MakeText(this.Context, "TODO: Save me :)", ToastLength.Long).Show();
+                    Toast.MakeText(this.Context, "TODO: Persist the alarm", ToastLength.Long).Show();
                     reDrawPins();
                 }
             });
         }
 
+        /*
+         *  Called everytime the user clicks on map.
+         *  Currently adds a custom pin on the map.
+         */ 
         protected void onMapClick(object sender, GoogleMap.MapClickEventArgs e)
         {
             var strToShow = "Lat " +  e.Point.Latitude + "  long " + e.Point.Longitude;
@@ -85,6 +98,10 @@ namespace GeoAlarm.Droid
             createPin(e);
         }
 
+        /*
+         * Creates a new customPin on the map. 
+         * The pin is treated as a temporal alarm and can be changed to an alarm
+         */ 
         private void createPin(GoogleMap.MapClickEventArgs e)
         {
             Alarm myAlarm1 = new Alarm
@@ -104,7 +121,7 @@ namespace GeoAlarm.Droid
                     Type = PinType.Place,
                     Position = new Position(e.Point.Latitude, e.Point.Longitude),
                     Label = "",
-                    Address = "394 Pacific Ave, San Francisco CA"
+                    Address = ""
                 },
                 PinType = "TempAlarm",
                 Alarm = myAlarm1,
@@ -119,16 +136,23 @@ namespace GeoAlarm.Droid
             {
                 customPins.Add(tempCustomPin);
             }
+            oldPin = tempCustomPin;
             map.Clear();
             reDrawPins();
         }
 
+        /*
+         * Function not used at the moment
+         */ 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
             
         }
 
+        /*
+         * Function not used at the moment
+         */
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             base.OnLayout(changed, l, t, r, b);
@@ -137,13 +161,18 @@ namespace GeoAlarm.Droid
             {
             }
         }
-        
+
+        /*
+         * Function not used at the moment
+         */
         void OnCameraChanged(object sender, GoogleMap.CameraChangeEventArgs e)
         {
 
         }
         
-
+        /*
+         * Draws circle on map with the selected Pin position and radius
+         */ 
         void reDrawCircle()
         {
             // Add Circle
@@ -157,6 +186,9 @@ namespace GeoAlarm.Droid
             map.AddCircle(circleOptions);
         }
 
+        /*
+         * Draws all the pins on the map.
+         */ 
         void reDrawPins()
         {
             // Add pins
@@ -171,7 +203,10 @@ namespace GeoAlarm.Droid
             }
         }
         
-
+        /*
+         * This function is called everytime a pin is click on the map.
+         * It handles which kind of info message should pop on top of the pin.
+         */ 
         public Android.Views.View GetInfoContents(Marker marker)
         {
             // Close menu
@@ -182,23 +217,32 @@ namespace GeoAlarm.Droid
             if (inflater != null)
             {
                 Android.Views.View view;
-                CustomPin customPin = GetCustomPin(marker);
-                
+                CustomPin customPin = GetCustomPin(marker);                
                 App.myMapPage.selectedPin = customPin;
-
                 if (customPin.PinType == "Alarm")
                 {
-                    view = inflater.Inflate(Resource.Layout.AlarmInfo, null);
-                    var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
-                    var alarmDays = view.FindViewById<TextView>(Resource.Id.AlarmDays);
-                    var alarmTime = view.FindViewById<TextView>(Resource.Id.AlarmTime);
-                    var alarmType = view.FindViewById<TextView>(Resource.Id.AlarmType);
-                    var alarmRange = view.FindViewById<TextView>(Resource.Id.AlarmRange);
-                    alarmTitle.Text = customPin.Alarm.Name;
-                    alarmDays.Text = LanguageUtils.LanguageVariables.INFOSCREEN_DAYS + " : " + customPin.Alarm.getActiveDaysInStr();
-                    alarmTime.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TIME + " : " + customPin.Alarm.StartTime;
-                    alarmType.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TYPE + " : " + customPin.Alarm.AlarmType.ToString();
-                    alarmRange.Text = LanguageUtils.LanguageVariables.INFOSCREEN_RANGE + " : " + customPin.Alarm.Radius.ToString();
+                    if (oldPin.Equals(customPin) && shouldBeDelete)
+                    {
+                        view = inflater.Inflate(Resource.Layout.CreateAlarmInfo, null);
+                        var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
+                        alarmTitle.Text = "Delete alarm";
+                        shouldBeDelete = false;
+                    }
+                    else
+                    {
+                        view = inflater.Inflate(Resource.Layout.AlarmInfo, null);
+                        var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
+                        var alarmDays = view.FindViewById<TextView>(Resource.Id.AlarmDays);
+                        var alarmTime = view.FindViewById<TextView>(Resource.Id.AlarmTime);
+                        var alarmType = view.FindViewById<TextView>(Resource.Id.AlarmType);
+                        var alarmRange = view.FindViewById<TextView>(Resource.Id.AlarmRange);
+                        alarmTitle.Text = customPin.Alarm.Name;
+                        alarmDays.Text = LanguageUtils.LanguageVariables.INFOSCREEN_DAYS + " : " + customPin.Alarm.getActiveDaysInStr();
+                        alarmTime.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TIME + " : " + customPin.Alarm.StartTime;
+                        alarmType.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TYPE + " : " + customPin.Alarm.AlarmType.ToString();
+                        alarmRange.Text = LanguageUtils.LanguageVariables.INFOSCREEN_RANGE + " : " + customPin.Alarm.Radius.ToString();
+                        shouldBeDelete = true;
+                    }
 
                 }
                 else
@@ -207,19 +251,24 @@ namespace GeoAlarm.Droid
                     var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
                     alarmTitle.Text = "Create new alarm";
                 }
-
+                oldPin = customPin;
                 return view;
             }
-            
-
             return null;
         }
 
+        /*
+         * Function not used at the moment
+         */             
         public Android.Views.View GetInfoWindow(Marker marker)
         {
             return null;
         }
 
+        /*
+         *  Gets a customPin from a marker.
+         *  A marker is given from Google when the user clicks a pin on the map
+         */ 
         CustomPin GetCustomPin(Marker annotation)
         {
             var position = new Position(annotation.Position.Latitude, annotation.Position.Longitude);
@@ -233,6 +282,9 @@ namespace GeoAlarm.Droid
             return null;
         }
 
+        /*
+         * This function is called when the user click on the info screen on top of the pin
+         */ 
         public void OnInfoWindowClick(Marker marker)
         {
             App.myMapPage.openAlarmMenu();

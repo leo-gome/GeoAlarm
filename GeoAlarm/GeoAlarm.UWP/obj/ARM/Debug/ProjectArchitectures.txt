@@ -1,1 +1,0 @@
-H:\Leviathan 2017\GeoAlarm\GeoAlarm\GeoAlarm.UWP\GeoAlarm.UWP.csproj;arm
