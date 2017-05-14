@@ -46,13 +46,47 @@ namespace GeoAlarm
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
+            var searchBar = new SearchBar
+            {
+                Placeholder = "Enter search term",
+            };
+
+            searchBar.SearchCommand = new Command(async () =>
+            {
+                var searchGeocoder = new Geocoder();
+                var possibleAddresses = (await searchGeocoder.GetPositionsForAddressAsync(searchBar.Text));
+                foreach (var a in possibleAddresses)
+                {
+                    customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+                     new Position(a.Latitude, a.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));
+                }
+            });
+
+            var searchbarLayout = new StackLayout
+            {
+                Orientation = StackOrientation.Vertical,
+                Padding = new Thickness(-10, 0, 0, 0),
+                BackgroundColor = Color.FromRgba(0, 0, 0, 180)
+            };
+            searchbarLayout.Children.Add(searchBar);
+
             relativeLayout.Children.Add(customMap,
                     xConstraint: Constraint.Constant(0),
                     yConstraint: Constraint.Constant(0),
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height; }));
+
+
             createAlarmMenu();
             closeAlarmMenu();
+
+
+            relativeLayout.Children.Add(searchbarLayout,
+                    xConstraint: Constraint.Constant(10),
+                    yConstraint: Constraint.Constant(10),
+                    widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width - 20; }),
+                    heightConstraint: Constraint.RelativeToParent((parent) => { return (parent.Height / 16) + 10; }));
+
             Content = relativeLayout;
         }
          
