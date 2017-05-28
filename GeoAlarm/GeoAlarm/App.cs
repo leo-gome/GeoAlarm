@@ -10,10 +10,11 @@ namespace GeoAlarm
 {
 	public class App : Application
 	{
-        public static MapPage myMapPage;
+        //public static MapPage myMapPage;
         public App ()
 		{
-            MainPage = new MapXamlPage();
+            Singleton.Instance.mapPage = new MapXamlPage();
+            MainPage = Singleton.Instance.mapPage;
 
             //myMapPage = new MapPage();
             //MainPage = myMapPage;

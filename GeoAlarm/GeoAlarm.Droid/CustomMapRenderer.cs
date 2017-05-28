@@ -177,9 +177,10 @@ namespace GeoAlarm.Droid
         {
             // Add Circle
             var circleOptions = new CircleOptions();
-            circleOptions.InvokeCenter(new LatLng(App.myMapPage.selectedPin.Pin.Position.Latitude, 
-                App.myMapPage.selectedPin.Pin.Position.Longitude));
-            circleOptions.InvokeRadius(App.myMapPage.selectedPin.Alarm.Radius);
+            var selPin = Singleton.Instance.mapPage.selectedPin;
+            circleOptions.InvokeCenter(new LatLng(selPin.Pin.Position.Latitude,
+                selPin.Pin.Position.Longitude));
+            circleOptions.InvokeRadius(selPin.Alarm.Radius);
             circleOptions.InvokeFillColor(0X66FF0000);
             circleOptions.InvokeStrokeColor(0X66FF0000);
             circleOptions.InvokeStrokeWidth(0);
@@ -210,15 +211,16 @@ namespace GeoAlarm.Droid
         public Android.Views.View GetInfoContents(Marker marker)
         {
             // Close menu
-            App.myMapPage.closeAlarmMenu();
-
+            Singleton.Instance.mapPage.closeAlarmMenu();
+            
             // Inflate custom info screen       
             var inflater = Android.App.Application.Context.GetSystemService(Context.LayoutInflaterService) as Android.Views.LayoutInflater;
             if (inflater != null)
             {
                 Android.Views.View view;
                 CustomPin customPin = GetCustomPin(marker);                
-                App.myMapPage.selectedPin = customPin;
+                //App.myMapPage.selectedPin = customPin;
+                Singleton.Instance.mapPage.selectedPin = customPin;
                 if (customPin.PinType == "Alarm")
                 {
                     if (oldPin.Equals(customPin) && shouldBeDelete)
@@ -287,7 +289,8 @@ namespace GeoAlarm.Droid
          */ 
         public void OnInfoWindowClick(Marker marker)
         {
-            App.myMapPage.openAlarmMenu();
+            //App.myMapPage.openAlarmMenu();
+            Singleton.Instance.mapPage.openAlarmMenu();
         }
     }
 }

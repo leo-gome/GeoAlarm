@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-    xmlns:local="clr-namespace:GeoAlarm;assembly=GeoAlarm"
+    xmlns:local="clr-namespace:GeoAlarm"
     x:Class="GeoAlarm.Layouts.MapXamlPage">
   <RelativeLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
@@ -22,7 +22,7 @@
                                                                     Property=Height}"/>
 
     <!-- Searchbar Menu -->
-    <StackLayout
+    <StackLayout 
       BackgroundColor="Black"
       Opacity="0.5"
       RelativeLayout.XConstraint=
@@ -44,7 +44,7 @@
     </StackLayout>
     
     <!-- Edit Menu -->
-    <StackLayout
+    <StackLayout  x:Name="editMenu"
       BackgroundColor="Black"
       Opacity="0.5"
       Padding="15"
@@ -60,14 +60,14 @@
       RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, 
                                                                     Property=Height,
                                                                     Factor=0.5}">
-      <Label Text="Name:"></Label>
+      <Label x:Name="alarmName" Text="Name:"></Label>
       <Entry></Entry>
-      <Label x:Name="valueLabel" Text="Area Size:"></Label>
-      <Slider ValueChanged="OnSliderValueChanged"></Slider>
+      <Label x:Name="sliderLabel" Text="Area Size:"></Label>
+      <Slider x:Name="slider" ValueChanged="OnSliderValueChanged"></Slider>
       <Label Text="Start:"></Label>
-      <TimePicker Format="h:mm:tt"></TimePicker>
+      <TimePicker  x:Name="startTime" Format="h:mm:tt"></TimePicker>
       <Label Text="End:"></Label>
-      <TimePicker Format="h:mm:tt"></TimePicker>
+      <TimePicker  x:Name="endTime" Format="h:mm:tt"></TimePicker>
       <Button Text="Submit" Clicked="OnButtonClicked"></Button>
     </StackLayout>
   </RelativeLayout>
