@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CustomCircle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomPin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\ColorConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LanguageUtils\LanguageVariables.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Layouts\MapXamlPage.xaml.cs">
       <DependentUpon>MapXamlPage.xaml</DependentUpon>

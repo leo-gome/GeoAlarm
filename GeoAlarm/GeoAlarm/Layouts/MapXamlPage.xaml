@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+    xmlns:local="clr-namespace:GeoAlarm;assembly=GeoAlarm"
+    x:Class="GeoAlarm.Layouts.MapXamlPage">
+  <RelativeLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+    <!--Map -->
+    <local:CustomMap
+           x:Name="geoAlarmMap"
+           IsShowingUser="False"
+           RelativeLayout.XConstraint=
+                 "{ConstraintExpression Type=RelativeToParent, 
+                                        Constant=0}"
+            RelativeLayout.YConstraint=
+                 "{ConstraintExpression Type=RelativeToParent, 
+                                        Constant=0}"
+            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                                   Property=Width}"
+            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                                    Property=Height}"/>
+
+    <!-- Searchbar Menu -->
+    <StackLayout
+      BackgroundColor="Black"
+      Opacity="0.5"
+      RelativeLayout.XConstraint=
+                "{ConstraintExpression Type=Constant, 
+                                      Constant=10}"
+      RelativeLayout.YConstraint=
+              "{ConstraintExpression Type=Constant, 
+                                    Constant=30}"
+      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                                Property=Width,
+                                                                Factor=1,
+                                                                Constant=-20}"
+      RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                                    Property=Height,
+                                                                    Factor=0.0625,
+                                                                    Constant=10}">
+
+      <SearchBar x:Name="searchcustomer"/>
+    </StackLayout>
+    
+    <!-- Edit Menu -->
+    <StackLayout
+      BackgroundColor="Black"
+      Opacity="0.5"
+      Padding="15"
+      RelativeLayout.XConstraint=
+                   "{ConstraintExpression Type=Constant, 
+                                        Constant=0}"
+      RelativeLayout.YConstraint=
+                 "{ConstraintExpression Type=RelativeToParent, 
+                                        Property=Height,
+                                        Factor=0.5}"
+      RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                                   Property=Width}"
+      RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, 
+                                                                    Property=Height,
+                                                                    Factor=0.5}">
+      <Label Text="Name:"></Label>
+      <Entry></Entry>
+      <Label x:Name="valueLabel" Text="Area Size:"></Label>
+      <Slider ValueChanged="OnSliderValueChanged"></Slider>
+      <Label Text="Start:"></Label>
+      <TimePicker Format="h:mm:tt"></TimePicker>
+      <Label Text="End:"></Label>
+      <TimePicker Format="h:mm:tt"></TimePicker>
+      <Button Text="Submit" Clicked="OnButtonClicked"></Button>
+    </StackLayout>
+  </RelativeLayout>
+</ContentPage>

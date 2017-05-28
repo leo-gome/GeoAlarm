@@ -4,6 +4,7 @@ using Xamarin.Forms.Maps;
 using System.Diagnostics;
 using System.Collections.Generic;
 
+
 namespace GeoAlarm
 {
     public class MapPage : ContentPage
@@ -46,6 +47,10 @@ namespace GeoAlarm
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
+
+
+
+#if __ANDROID__
             var searchBar = new SearchBar
             {
                 Placeholder = "Enter search term",
@@ -66,7 +71,7 @@ namespace GeoAlarm
             {
                 Orientation = StackOrientation.Vertical,
                 Padding = new Thickness(-10, 0, 0, 0),
-                BackgroundColor = Color.FromRgba(0, 0, 0, 180)
+                BackgroundColor = GUI.ColorConfig.APP_COLOR_THEME
             };
             searchbarLayout.Children.Add(searchBar);
 
@@ -75,6 +80,10 @@ namespace GeoAlarm
                     yConstraint: Constraint.Constant(0),
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return parent.Height; }));
+#endif
+
+
+
 
 
             createAlarmMenu();
@@ -83,7 +92,7 @@ namespace GeoAlarm
 
             relativeLayout.Children.Add(searchbarLayout,
                     xConstraint: Constraint.Constant(10),
-                    yConstraint: Constraint.Constant(10),
+                    yConstraint: Constraint.Constant(30),
                     widthConstraint: Constraint.RelativeToParent((parent) => { return parent.Width - 20; }),
                     heightConstraint: Constraint.RelativeToParent((parent) => { return (parent.Height / 16) + 10; }));
 
@@ -158,7 +167,7 @@ namespace GeoAlarm
                 Padding = 15,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = Color.FromRgba (0,0,0, 180)            
+                BackgroundColor = GUI.ColorConfig.APP_COLOR_THEME         
             };
             relativeLayout.Children.Add(alarmLayout,
                     xConstraint: Constraint.Constant(0),

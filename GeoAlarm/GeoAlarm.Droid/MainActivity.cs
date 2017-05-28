@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Xamarin.Forms.Platform.Android;
 
 namespace GeoAlarm.Droid
 {
@@ -18,7 +19,8 @@ namespace GeoAlarm.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             global::Xamarin.FormsMaps.Init(this, bundle);
-
+            Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
+            Window.SetStatusBarColor(GUI.ColorConfig.APP_COLOR_THEME.ToAndroid());
             LoadApplication (new GeoAlarm.App ());
 		}
 	}
