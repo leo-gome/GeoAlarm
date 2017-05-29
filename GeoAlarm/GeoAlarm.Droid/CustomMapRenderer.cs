@@ -12,8 +12,7 @@ using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
 using Android.App;
 using System.Linq;
-
-
+using GeoAlarm.Layouts;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace GeoAlarm.Droid
@@ -62,7 +61,7 @@ namespace GeoAlarm.Droid
             // RedrawMe: Is used when the main thread needs to redraw any specific objects on the map
             // pinsOnly: Only the pins are drawn
             // all: Pins and the circle are drawn
-            MessagingCenter.Subscribe<MapPage, string>(this, "RedrawMe", (sender, arg) =>
+            MessagingCenter.Subscribe<MapXamlPage, string>(this, "RedrawMe", (sender, arg) =>
             {
                 map.Clear();
                 if (arg == "pinsOnly")
@@ -77,7 +76,7 @@ namespace GeoAlarm.Droid
             });
 
             // Save: Is called in order to give five a feedback to the user that the alarm was saved
-            MessagingCenter.Subscribe<MapPage, string>(this, "Save", (sender, arg) =>
+            MessagingCenter.Subscribe<MapXamlPage, string>(this, "Save", (sender, arg) =>
             {
                 if (arg == "Alarm")
                 {

@@ -40,7 +40,7 @@
                                                                     Factor=0.0625,
                                                                     Constant=10}">
 
-      <SearchBar x:Name="searchcustomer"/>
+      <SearchBar x:Name="searchLocation" Placeholder="Search" SearchCommand="{Binding onSearchButtonClicked}"/>
     </StackLayout>
     
     <!-- Edit Menu -->
