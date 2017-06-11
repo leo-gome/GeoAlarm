@@ -19,7 +19,7 @@ namespace GeoAlarm.Layouts
         private readonly int MIN_RADIUS = 500;
 
         // Tweakers
-        private readonly int CAMERA_LATITUDE_OFFSET = 80000;
+        private readonly int CAMERA_LATITUDE_OFFSET = 90000;
         private readonly int CAMERA_ZOOM_OFFSET = 1000;
         private readonly uint ANIMATION_SPEED = 400;
 
@@ -28,6 +28,9 @@ namespace GeoAlarm.Layouts
             InitializeComponent ();
             slider.Maximum = MAX_RADIUS;
             slider.Minimum = MIN_RADIUS;
+
+            // Init State
+            Singleton.Instance.state = States.STANDARD;
 
             //Testing 
             this.customMap = (CustomMap) geoAlarmMap;
@@ -38,6 +41,9 @@ namespace GeoAlarm.Layouts
             selectedPin = cPins[0];
             closeAlarmMenu();
 
+
+
+           // autoComplete.ValueChanged += updateSugestions;
         }
 
         void OnSliderValueChanged(object sender,
@@ -57,6 +63,7 @@ namespace GeoAlarm.Layouts
             closeAlarmMenu();
             saveAlarm();
             cleanAlarmCircle();
+            Singleton.Instance.state = States.STANDARD;
         }
 
 
@@ -83,7 +90,16 @@ namespace GeoAlarm.Layouts
             selectedPin.Alarm.Radius = slider.Value;            
             selectedPin.Alarm.StartTime = startTime.Time;            
             selectedPin.Alarm.EndTime = endTime.Time;
-            MessagingCenter.Send<MapXamlPage, string>(this, "Save", "Alarm");            
+            MessagingCenter.Send<MapXamlPage, string>(this, "Save", "Alarm");
+            Singleton.Instance.state = States.STANDARD;
+        }
+
+        public void removeAlarm()
+        {
+            customMap.CustomPins.Remove(selectedPin);
+            MessagingCenter.Send<MapXamlPage, string>(this, "RedrawMe", "pinsOnly");
+            Singleton.Instance.state = States.STANDARD;
+
         }
 
 
@@ -103,14 +119,31 @@ namespace GeoAlarm.Layouts
 
         async void onSearchButtonClicked()
         {
+            /*
             var searchGeocoder = new Geocoder();
-            var possibleAddresses = (await searchGeocoder.GetPositionsForAddressAsync(searchLocation.Text));
+            List<Position> possibleAddresses = (List<Position>)(await searchGeocoder.GetPositionsForAddressAsync(searchLocation.Text));
+            if (possibleAddresses.Count > 0)
+            {
+                Position a = possibleAddresses[0];
+                customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
+                 new Position(a.Latitude, a.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));
+
+            }
             foreach (var a in possibleAddresses)
             {
                 customMap.MoveToRegion(MapSpan.FromCenterAndRadius(
                  new Position(a.Latitude, a.Longitude), Distance.FromMiles(selectedPin.Alarm.Radius / CAMERA_ZOOM_OFFSET)));
             }
+            */
         }
+        /*
+        async void updateSugestions(object o, Syncfusion.SfAutoComplete.XForms.ValueChangedEventArgs args)
+        {
+            var searchGeocoder = new Geocoder();
+            List<Object> possibleAddresses = (List<Object>)(await searchGeocoder.GetPositionsForAddressAsync(autoComplete.Text));
+            autoComplete.DataSource = possibleAddresses;
+        }
+        */
 
     }
 }

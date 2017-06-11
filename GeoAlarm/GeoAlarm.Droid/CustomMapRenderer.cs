@@ -126,15 +126,22 @@ namespace GeoAlarm.Droid
                 Alarm = myAlarm1,
                 Icon = CustomPin.IconType.Blue
             };
-            var lastCPin = customPins.Last();
-            if(lastCPin.PinType == "TempAlarm")
+            if (customPins.Count > 0)
             {
-                customPins[customPins.Count - 1] = tempCustomPin;
+                var lastCPin = customPins.Last();
+                if (lastCPin.PinType == "TempAlarm")
+                {
+                    customPins[customPins.Count - 1] = tempCustomPin;
+                }
+                else
+                {
+                    customPins.Add(tempCustomPin);
+                }
             }
             else
             {
                 customPins.Add(tempCustomPin);
-            }
+            }        
             oldPin = tempCustomPin;
             map.Clear();
             reDrawPins();
@@ -227,6 +234,7 @@ namespace GeoAlarm.Droid
                         view = inflater.Inflate(Resource.Layout.CreateAlarmInfo, null);
                         var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
                         alarmTitle.Text = "Delete alarm";
+                        Singleton.Instance.state = States.DELETE;
                         shouldBeDelete = false;
                     }
                     else
@@ -243,6 +251,7 @@ namespace GeoAlarm.Droid
                         alarmType.Text = LanguageUtils.LanguageVariables.INFOSCREEN_TYPE + " : " + customPin.Alarm.AlarmType.ToString();
                         alarmRange.Text = LanguageUtils.LanguageVariables.INFOSCREEN_RANGE + " : " + customPin.Alarm.Radius.ToString();
                         shouldBeDelete = true;
+                        Singleton.Instance.state = States.INFO;
                     }
 
                 }
@@ -251,6 +260,7 @@ namespace GeoAlarm.Droid
                     view = inflater.Inflate(Resource.Layout.CreateAlarmInfo, null);
                     var alarmTitle = view.FindViewById<TextView>(Resource.Id.AlarmTitle);
                     alarmTitle.Text = "Create new alarm";
+                    Singleton.Instance.state = States.INFO;
                 }
                 oldPin = customPin;
                 return view;
@@ -288,8 +298,21 @@ namespace GeoAlarm.Droid
          */ 
         public void OnInfoWindowClick(Marker marker)
         {
-            //App.myMapPage.openAlarmMenu();
-            Singleton.Instance.mapPage.openAlarmMenu();
+            switch (Singleton.Instance.state)
+            {
+                case States.INFO:
+                    Console.WriteLine("Case INFO");
+                    Singleton.Instance.mapPage.openAlarmMenu();
+                    break;
+                case States.DELETE:
+                    Singleton.Instance.mapPage.removeAlarm();
+                    Console.WriteLine("Case DELETE");
+                    break;
+                default:
+                    Console.WriteLine("Default case");
+                    break;
+            }
+
         }
     }
 }

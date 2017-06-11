@@ -23,6 +23,8 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MapPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Singleton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)States.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TabbedPageDemoPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestUtils\TestData.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ namespace GeoAlarm
     {
         private static Singleton instance;
         public MapXamlPage mapPage { get; set; }
+        public States state { get; set; }
 
         private Singleton() { }
 

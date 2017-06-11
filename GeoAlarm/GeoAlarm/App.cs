@@ -14,8 +14,8 @@ namespace GeoAlarm
         public App ()
 		{
             Singleton.Instance.mapPage = new MapXamlPage();
-            MainPage = Singleton.Instance.mapPage;
-
+            //MainPage = Singleton.Instance.mapPage;
+            MainPage = new TabbedPageDemoPage();
             //myMapPage = new MapPage();
             //MainPage = myMapPage;
         }

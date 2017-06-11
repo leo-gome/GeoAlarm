@@ -19,8 +19,8 @@ namespace GeoAlarm.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             global::Xamarin.FormsMaps.Init(this, bundle);
-            Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
-            Window.SetStatusBarColor(GUI.ColorConfig.APP_COLOR_THEME.ToAndroid());
+            //Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
+            //Window.SetStatusBarColor(GUI.ColorConfig.APP_COLOR_THEME.ToAndroid());
             LoadApplication (new GeoAlarm.App ());
 		}
 	}
